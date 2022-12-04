@@ -2,7 +2,16 @@
 
 namespace HusamAwadhi\PowerParser\Parsers;
 
-class BaseParser implements ParserInterface
+abstract class BaseParser implements ParserInterface
 {
-    
+    protected function __construct()
+    {
+        ;
+    }
+
+
+    public function getParser()
+    {
+        # code...
+    }
 }
