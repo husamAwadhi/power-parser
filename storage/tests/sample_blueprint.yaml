@@ -1,8 +1,7 @@
 version: 1.0
 meta:
   file:
-    extensions:
-      - xlsx
+    extension: xlsx
     name: 'sample'
 blueprint:
   - 
