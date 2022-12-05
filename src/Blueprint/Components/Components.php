@@ -13,7 +13,9 @@ class Components implements Iterator
     public function __construct($elements)
     {
         $this->position = 0;
-        $this->elements = $elements;
+        $this->elements = array_map(function ($element) {
+            return (object) $element;
+        }, $elements);
     }
 
     public function rewind(): void

@@ -1,4 +1,4 @@
-version: 1.0
+version: '1.0'
 meta:
   file:
     extension: xlsx
@@ -17,12 +17,6 @@ blueprint:
       - 
         name: cashier
         position: 2
-  - 
-    mandatory: true
-    type: hit
-    conditions:
-      column: [1]
-      is: 'التاريخ'
   - 
     type: hit
     mandatory: true
