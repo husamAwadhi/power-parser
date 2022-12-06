@@ -14,9 +14,8 @@ class BlueprintTest extends TestCase
      */
     public function canCreateFromYamlFile()
     {
-        $rawFile = file_get_contents(__DIR__ . '/../../storage/tests/' . $this->fileName);
+        $rawFile = file_get_contents(dirname(__DIR__) . '/../storage/tests/' . $this->fileName);
         $blueprint = Blueprint::createBlueprint($rawFile);
-        var_dump($blueprint);
         $this->assertInstanceOf(BlueprintInterface::class, $blueprint);
     }
 }
