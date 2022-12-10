@@ -3,7 +3,8 @@
     "description": "a powerful file parsing tool",
     "type": "library",
     "require-dev": {
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "symfony/var-dumper": "^6.2"
     },
     "license": "mit",
     "autoload": {
@@ -16,6 +17,5 @@
             "name": "Husam",
             "email": "husam.awadhi@gmail.com"
         }
-    ],
-    "require": {}
+    ]
 }
