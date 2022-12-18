@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Tests\Blueprint;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
@@ -29,7 +32,7 @@ class BlueprintTest extends TestCase
         $blueprint = Blueprint::createBlueprint($path, true);
         $this->assertInstanceOf(BlueprintInterface::class, $blueprint);
     }
- 
+
     /**
      * @dataProvider emptyStreamsProvider
      */

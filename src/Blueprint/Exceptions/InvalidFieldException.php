@@ -4,6 +4,6 @@ namespace HusamAwadhi\PowerParser\Blueprint\Exceptions;
 
 use Exception;
 
-class InvalidComponentException extends Exception
+class InvalidFieldException extends Exception
 {
 }

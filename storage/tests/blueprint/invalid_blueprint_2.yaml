@@ -1,5 +1,5 @@
-version: '1.0'
+version: "1.0"
 meta:
   file:
     extension: xlsx
-    name: 'sample'
+    name: "sample"

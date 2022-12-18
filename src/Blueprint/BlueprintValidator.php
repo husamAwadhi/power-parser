@@ -1,7 +1,7 @@
 <?php
 namespace HusamAwadhi\PowerParser\Blueprint;
 
-interface BlueprintComponentInterface
+class BlueprintValidator
 {
     
 }

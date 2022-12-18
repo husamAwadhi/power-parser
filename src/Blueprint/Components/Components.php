@@ -2,50 +2,41 @@
 
 namespace HusamAwadhi\PowerParser\Blueprint\Components;
 
+use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
 use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidComponentException;
 use HusamAwadhi\PowerParser\Blueprint\Type;
-use Iterator;
 use ReturnTypeWillChange;
 
-use function PHPSTORM_META\type;
-
-class Components implements Iterator
+class Components implements \Iterator, ComponentInterface
 {
-    private const INVALID_TYPE = "Element %s must be an array, %s found";
+    private const INVALID_TYPE = "Element %s must be an array, given %s";
     private const MISSING_ELEMENT = "Blueprint section %s is missing a mandatory element %s";
     private const INVALID_VALUE = "Blueprint %s element has invalid value (%s). Acceptable value(s) [%s]";
 
     private $position = 0;
     private readonly array $elements;
 
-    public function __construct($elements)
-    {
+    protected function __construct(
+        array $elements
+    ) {
         $this->position = 0;
-        $this->elements = \json_decode(\json_encode($elements));
     }
 
-    /**
-     * Entrypoint function
-     *
-     * @param array $elements
-     * @return self
-     * @throws InvalidComponentException
-     */
-    public static function createFromArray(array $elements): self
+    public static function createFromParameters(array $elements): self
     {
-        self::isValid($elements);
+        self::validation($elements);
         return new self($elements);
     }
 
     /**
      * @throws InvalidComponentException
      */
-    public static function isValid(array $elements)
+    public static function validation(array $elements): void
     {
         $i = 0;
         foreach ($elements as $element) {
             if (!is_array($element)) {
-                throw new InvalidComponentException(\sprintf(self::INVALID_TYPE, "#$i", type($element)));
+                throw new InvalidComponentException(\sprintf(self::INVALID_TYPE, "#$i", gettype($element)));
             }
 
             if (!isset($element['type'])) {
@@ -64,6 +55,16 @@ class Components implements Iterator
 
             $i++;
         }
+    }
+
+    public static function getMandatoryElements()  : array
+    {
+        return [];
+    }
+
+    public static function getOptionalElements()  : array
+    {
+        return [];
     }
 
     public function rewind(): void

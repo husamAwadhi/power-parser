@@ -4,23 +4,17 @@ namespace HusamAwadhi\PowerParser\Blueprint;
 
 use HusamAwadhi\PowerParser\Blueprint\Components\Components;
 use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidBlueprintException;
-use Iterator;
 
 class Blueprint implements BlueprintInterface
 {
-    public readonly string $rawFile;
-    public readonly string $name;
-    public readonly string $version;
-    public readonly string $extension;
-    public readonly Iterator $components;
 
-    private function __construct($rawFile, $name, $version, $extension, $components)
-    {
-        $this->rawFile = $rawFile;
-        $this->name = $name;
-        $this->version = $version;
-        $this->extension = $extension;
-        $this->components = $components;
+    private function __construct(
+        public readonly string $rawFile,
+        public readonly string $name,
+        public readonly string $version,
+        public readonly string $extension,
+        public readonly Components $components
+    ) {
     }
 
     /**
@@ -36,14 +30,14 @@ class Blueprint implements BlueprintInterface
     {
         $parsedFile = self::parseYaml($stream, $isPath);
 
-        self::isValid($parsedFile);
+        self::validate($parsedFile);
 
         return new self(
             $stream,
             $parsedFile['meta']['file']['name'],
             $parsedFile['version'],
             $parsedFile['meta']['file']['extension'],
-            Components::createFromArray($parsedFile['blueprint']),
+            Components::createFromParameters($parsedFile['blueprint']),
         );
     }
 
@@ -54,7 +48,7 @@ class Blueprint implements BlueprintInterface
      *
      * @throws InvalidBlueprintException
      */
-    public static function isValid($yaml): void
+    public static function validate($yaml): void
     {
         if (!$yaml) {
             throw new InvalidBlueprintException(self::CANNOT_PARSE);
@@ -85,9 +79,12 @@ class Blueprint implements BlueprintInterface
         }
     }
 
+    /**
+     * @throws InvalidBlueprintException
+     */
     private static function parseYaml($input, $isPath)
     {
-        if (!$input) {
+        if (!$input || ($isPath && !is_file($input))) {
             throw new InvalidBlueprintException(self::EMPTY_STREAM);
         }
 

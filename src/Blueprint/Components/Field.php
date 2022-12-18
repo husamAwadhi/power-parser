@@ -1,16 +1,42 @@
 <?php
+
 namespace HusamAwadhi\PowerParser\Blueprint\Components;
 
-use HusamAwadhi\PowerParser\Blueprint\BlueprintComponentInterface;
+use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
+use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidFieldException;
 
-class Field implements BlueprintComponentInterface
+class Field implements ComponentInterface
 {
-    public readonly int $position;
-    public readonly string $name;
-    
-    public function __construct(string $name, int $position)
+
+    public function __construct(
+        public readonly string $name,
+        public readonly int $position
+    ) {
+    }
+
+    public static function createFromParameters(array $field): self
     {
-        $this->name = $name;
-        $this->position = $position;
+        self::validation($field);
+        return new self($field['name'], $field['position']);
+    }
+
+    /**
+     * @throws InvalidFieldException
+     */
+    public static function validation(array $field): void
+    {
+        if (!isset($element['name']) || empty($element['name'])) {
+            throw new InvalidFieldException(\sprintf(self::MISSING_ELEMENT, "blueprint (#$i)", 'fields'));
+        }
+    }
+
+    public static function getMandatoryElements()  : array
+    {
+        return [];
+    }
+
+    public static function getOptionalElements()  : array
+    {
+        return [];
     }
 }

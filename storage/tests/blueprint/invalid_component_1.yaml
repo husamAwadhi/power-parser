@@ -1,19 +1,16 @@
-version: '1.0'
+version: "1.0"
 meta:
   file:
     extension: xlsx
-    name: 'sample'
+    name: "sample"
 blueprint:
-  - 
-    mandatory: true
+  - mandatory: true
     type: miss
-    conditions: 
+    conditions:
       column: [1]
-      is: 'رقم الصندوق'
+      is: "رقم الصندوق"
     fields:
-      - 
-        name: currency
+      - name: currency
         position: 6
-      - 
-        name: cashier
+      - name: cashier
         position: 2
