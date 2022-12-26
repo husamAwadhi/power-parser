@@ -20,6 +20,22 @@ class Components implements \Iterator, ComponentInterface
         array $elements
     ) {
         $this->position = 0;
+        $this->elements = $this->buildElements($elements);
+    }
+
+    protected function buildElements(array $elements = []): array
+    {
+        $components = [];
+        foreach ($elements as $element) {
+            $components[] = [
+                'type' => Type::from($element['type']),
+                'fields' => Fields::createFromParameters($element['fields']),
+                'mandatory' => (bool) ($element['mandatory'] ?? false),
+                // 'conditions' => Conditions::createFromParameters($element['conditions'] ?? []),
+            ];
+        }
+
+        return $components;
     }
 
     public static function createFromParameters(array $elements): self
@@ -57,12 +73,12 @@ class Components implements \Iterator, ComponentInterface
         }
     }
 
-    public static function getMandatoryElements()  : array
+    public static function getMandatoryElements(): array
     {
         return [];
     }
 
-    public static function getOptionalElements()  : array
+    public static function getOptionalElements(): array
     {
         return [];
     }

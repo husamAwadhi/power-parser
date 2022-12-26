@@ -4,25 +4,47 @@ namespace HusamAwadhi\PowerParser;
 
 use HusamAwadhi\PowerParser\Helper;
 
-class Dictionary
+final class Dictionary
 {
     private const FILE = 'en';
     private const DICTIONARY_DIRECTORY = '/storage/dictionary/';
 
-    private static function loadDictionary(): array
+    private readonly string $filePath;
+
+    public function __construct(string $filePath = null)
     {
-        static $dictionary = false;
-        dump($dictionary);
-        return $dictionary
-            ?? $dictionary = Helper::toOneDimensionArray(
-                require(dirname(__DIR__) . self::DICTIONARY_DIRECTORY . self::FILE . '.php')
+        $this->filePath = $this->generateFilePath($filePath);
+    }
+
+    private function generateFilePath(string $filePath = null)
+    {
+        return (is_file($filePath ?? '')
+            ? $filePath
+            : dirname(__DIR__) . self::DICTIONARY_DIRECTORY . self::FILE . '.php'
+        );
+    }
+
+    private function loadDictionary(): array
+    {
+        static $dictionary = [];
+        return $dictionary[$this->filePath]
+            ?? $dictionary[$this->filePath] = Helper::toOneDimensionArray(
+                require($this->filePath)
             );
     }
 
-    public function getValue(string $key, mixed $default = null): mixed
+    public function get(string $key, mixed $default = null): mixed
     {
-        return isset(self::loadDictionary()[$key])
-            ? self::loadDictionary()[$key]
-            : $default;
+        return (isset($this->loadDictionary()[$key])
+            ? $this->loadDictionary()[$key]
+            : $default);
+    }
+
+    public function getFormatted(string $key, mixed $default = null, array $values): mixed
+    {
+        return \sprintf(
+            $this->get($key, $default),
+            ...$values
+        );
     }
 }
