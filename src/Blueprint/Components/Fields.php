@@ -15,7 +15,7 @@ class Fields implements \Iterator, ComponentInterface
         public readonly array $fields,
     ) {
         $this->position = 0;
-        $this->dict = new Dictionary();
+        // $this->dict = new Dictionary();
     }
 
     public static function createFromParameters(array $fields): self
@@ -30,11 +30,19 @@ class Fields implements \Iterator, ComponentInterface
     public static function validation(array $fields): void
     {
         foreach ($fields as $field) {
-            if (!isset($field['name']) || empty($field['name'])) {
-                throw new InvalidFieldException('missing name');
+            if (
+                !isset($field['name']) ||
+                empty($field['name']) ||
+                !is_string($field['name'])
+            ) {
+                throw new InvalidFieldException('missing or invalid name');
             }
-            if (!isset($field['position']) || empty($field['position'])) {
-                throw new InvalidFieldException('missing position');
+            if (
+                !isset($field['position']) ||
+                empty($field['position']) ||
+                !is_int($field['position'])
+            ) {
+                throw new InvalidFieldException('missing or invalid position');
             }
         }
     }
