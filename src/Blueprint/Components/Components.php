@@ -31,7 +31,9 @@ class Components implements \Iterator, ComponentInterface
                 'type' => Type::from($element['type']),
                 'fields' => Fields::createFromParameters($element['fields']),
                 'mandatory' => (bool) ($element['mandatory'] ?? false),
-                'conditions' => Conditions::createFromParameters($element['conditions'] ?? []),
+                'conditions' => ($element['type'] == Type::NEXT->value
+                    ? []
+                    : Conditions::createFromParameters($element['conditions'])),
             ];
         }
 

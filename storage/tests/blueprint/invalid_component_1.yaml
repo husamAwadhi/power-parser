@@ -7,8 +7,8 @@ blueprint:
   - mandatory: true
     type: miss
     conditions:
-      column: [1]
-      is: "رقم الصندوق"
+      - column: [1]
+        is: "رقم الصندوق"
     fields:
       - name: currency
         position: 6

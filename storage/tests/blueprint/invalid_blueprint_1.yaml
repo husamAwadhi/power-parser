@@ -3,8 +3,8 @@ blueprint:
   - mandatory: true
     type: hit
     conditions:
-      column: [1]
-      is: "رقم الصندوق"
+      - column: [1]
+        is: "رقم الصندوق"
     fields:
       - name: currency
         position: 6
@@ -14,8 +14,8 @@ blueprint:
     mandatory: true
     table: true
     conditions:
-      column: [1]
-      isNot: "null"
+      - column: [1]
+        isNot: "null"
     fields:
       - name: date
         position: 1
