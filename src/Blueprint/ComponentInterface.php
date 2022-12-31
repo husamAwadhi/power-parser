@@ -27,5 +27,5 @@ interface ComponentInterface
      * Validate passed parameters before instantiating self
      * @param array $elements
      */
-    public static function validation(array $elements): void;
+    public static function validation(array &$elements): void;
 }

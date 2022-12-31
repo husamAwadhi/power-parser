@@ -27,7 +27,7 @@ class Fields implements \Iterator, ComponentInterface
     /**
      * @throws InvalidFieldException
      */
-    public static function validation(array $fields): void
+    public static function validation(array &$fields): void
     {
         foreach ($fields as $field) {
             if (

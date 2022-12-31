@@ -31,7 +31,7 @@ class Components implements \Iterator, ComponentInterface
                 'type' => Type::from($element['type']),
                 'fields' => Fields::createFromParameters($element['fields']),
                 'mandatory' => (bool) ($element['mandatory'] ?? false),
-                // 'conditions' => Conditions::createFromParameters($element['conditions'] ?? []),
+                'conditions' => Conditions::createFromParameters($element['conditions'] ?? []),
             ];
         }
 
@@ -47,7 +47,7 @@ class Components implements \Iterator, ComponentInterface
     /**
      * @throws InvalidComponentException
      */
-    public static function validation(array $elements): void
+    public static function validation(array &$elements): void
     {
         $i = 0;
         foreach ($elements as $element) {

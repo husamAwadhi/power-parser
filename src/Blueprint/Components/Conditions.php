@@ -32,31 +32,50 @@ class Conditions implements \Iterator, ComponentInterface
     /**
      * @throws InvalidComponentException
      */
-    public static function validation(array $conditions): void
+    public static function validation(array &$conditions): void
     {
+        $finalConditions = [];
         foreach ($conditions as $condition) {
-            if (!isset($condition['column']) || empty($condition['column']) || !is_array($condition['column'])) {
-                throw new InvalidFieldException('missing column');
+            if (
+                !isset($condition['column']) ||
+                empty($condition['column']) ||
+                !is_array($condition['column'])
+            ) {
+                throw new InvalidFieldException('missing or empty column');
             }
 
-            // if (!isset($condition['type'])) {
-            //     throw new InvalidComponentException(\sprintf(self::MISSING_ELEMENT, "blueprint (#$i)", 'type'));
-            // }
+            $conditionKeyword = [];
+            foreach (ConditionKeyword::cases() as $case) {
+                if (
+                    isset($condition[$case->value]) &&
+                    !empty($condition[$case->value]) &&
+                    is_string($condition[$case->value])
+                ) {
+                    $conditionKeyword = [
+                        $case->value,
+                        $condition[$case->value]
+                    ];
+                    break;
+                }
+            }
 
-            // if (!ConditionKeyword::tryFrom($condition['type'])) {
-            //     throw new InvalidComponentException(
-            //         \sprintf(self::INVALID_VALUE, "type (#$i)", $condition['type'], implode(',', array_column(Type::cases(), 'value')))
-            //     );
-            // }
+            if (sizeof($conditionKeyword) == 0) {
+                throw new InvalidFieldException('no valid condition found');
+            }
+            $finalConditions[] = [
+                'column' => $condition['column'],
+                $conditionKeyword[0] => $conditionKeyword[1]
+            ];
         }
+        $conditions = $finalConditions;
     }
 
-    public static function getMandatoryElements()  : array
+    public static function getMandatoryElements(): array
     {
         return [];
     }
 
-    public static function getOptionalElements()  : array
+    public static function getOptionalElements(): array
     {
         return [];
     }
