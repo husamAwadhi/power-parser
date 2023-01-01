@@ -4,6 +4,7 @@ namespace HusamAwadhi\PowerParser\Blueprint;
 
 use HusamAwadhi\PowerParser\Blueprint\Components\Components;
 use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidBlueprintException;
+use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidComponentException;
 
 class Blueprint implements BlueprintInterface
 {
@@ -26,7 +27,7 @@ class Blueprint implements BlueprintInterface
      * @throws InvalidBlueprintException
      * @throws InvalidComponentException
      */
-    public static function createBlueprint(string $stream, $isPath = false): self | null
+    public static function createBlueprint(string $stream, bool $isPath = false): self | null
     {
         $parsedFile = self::parseYaml($stream, $isPath);
 
@@ -48,7 +49,7 @@ class Blueprint implements BlueprintInterface
      *
      * @throws InvalidBlueprintException
      */
-    public static function validate($yaml): void
+    public static function validate(mixed $yaml): void
     {
         if (!$yaml) {
             throw new InvalidBlueprintException(self::CANNOT_PARSE);
@@ -82,7 +83,7 @@ class Blueprint implements BlueprintInterface
     /**
      * @throws InvalidBlueprintException
      */
-    private static function parseYaml($input, $isPath)
+    private static function parseYaml(string $input, bool $isPath): mixed
     {
         if (!$input || ($isPath && !is_file($input))) {
             throw new InvalidBlueprintException(self::EMPTY_STREAM);

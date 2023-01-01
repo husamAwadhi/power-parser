@@ -9,6 +9,7 @@ use ReturnTypeWillChange;
 
 class Conditions implements \Iterator, ComponentInterface
 {
+    private int $position = 0;
 
     public function __construct(
         public readonly array $conditions
@@ -19,7 +20,7 @@ class Conditions implements \Iterator, ComponentInterface
     /**
      * Entrypoint function
      *
-     * @param array $elements
+     * @param array $conditions
      * @return self
      * @throws InvalidComponentException
      */
@@ -88,7 +89,7 @@ class Conditions implements \Iterator, ComponentInterface
     #[ReturnTypeWillChange]
     public function current()
     {
-        return $this->fields[$this->position];
+        return $this->conditions[$this->position];
     }
 
     #[ReturnTypeWillChange]

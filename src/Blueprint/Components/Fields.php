@@ -10,6 +10,7 @@ use ReturnTypeWillChange;
 class Fields implements \Iterator, ComponentInterface
 {
     protected Dictionary $dict;
+    private int $position = 0;
 
     public function __construct(
         public readonly array $fields,

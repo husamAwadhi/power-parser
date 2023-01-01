@@ -19,7 +19,7 @@ class Helper
      * [ 'key1.key2' => 'value' ]
      *
      * @param array $array
-     * @param boolean $nestedKey
+     * @param string $nestedKey
      * @param array $final
      * @return array
      * @throws \Exception on duplicate keys
