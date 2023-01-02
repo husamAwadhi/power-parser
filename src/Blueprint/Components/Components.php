@@ -5,15 +5,17 @@ namespace HusamAwadhi\PowerParser\Blueprint\Components;
 use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
 use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidComponentException;
 use HusamAwadhi\PowerParser\Blueprint\Type;
+use Iterator;
 use ReturnTypeWillChange;
 
-class Components implements \Iterator, ComponentInterface
+class Components implements ComponentInterface, Iterator
 {
-    private const INVALID_TYPE = "Element %s must be an array, given %s";
-    private const MISSING_ELEMENT = "Blueprint section %s is missing a mandatory element %s";
-    private const INVALID_VALUE = "Blueprint %s element has invalid value (%s). Acceptable value(s) [%s]";
+    private const INVALID_TYPE = 'Element %s must be an array, given %s';
+    private const MISSING_ELEMENT = 'Blueprint section %s is missing a mandatory element %s';
+    private const INVALID_VALUE = 'Blueprint %s element has invalid value (%s). Acceptable value(s) [%s]';
 
     private $position = 0;
+
     private readonly array $elements;
 
     protected function __construct(
@@ -43,6 +45,7 @@ class Components implements \Iterator, ComponentInterface
     public static function createFromParameters(array $elements): self
     {
         self::validation($elements);
+
         return new self($elements);
     }
 
@@ -71,7 +74,7 @@ class Components implements \Iterator, ComponentInterface
                 throw new InvalidComponentException(\sprintf(self::MISSING_ELEMENT, "blueprint (#$i)", 'fields'));
             }
 
-            $i++;
+            ++$i;
         }
     }
 

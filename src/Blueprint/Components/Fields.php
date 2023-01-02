@@ -5,11 +5,13 @@ namespace HusamAwadhi\PowerParser\Blueprint\Components;
 use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
 use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidFieldException;
 use HusamAwadhi\PowerParser\Dictionary;
+use Iterator;
 use ReturnTypeWillChange;
 
-class Fields implements \Iterator, ComponentInterface
+class Fields implements ComponentInterface, Iterator
 {
     protected Dictionary $dict;
+
     private int $position = 0;
 
     public function __construct(
@@ -22,6 +24,7 @@ class Fields implements \Iterator, ComponentInterface
     public static function createFromParameters(array $fields): self
     {
         self::validation($fields);
+
         return new self($fields);
     }
 

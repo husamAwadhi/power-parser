@@ -8,7 +8,6 @@ use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidComponentException;
 
 class Blueprint implements BlueprintInterface
 {
-
     private function __construct(
         public readonly string $rawFile,
         public readonly string $name,
@@ -19,7 +18,7 @@ class Blueprint implements BlueprintInterface
     }
 
     /**
-     * Blueprint entrypoint
+     * Blueprint entrypoint.
      *
      * @param string $stream File path or content
      * @param bool $isPath true if passed stream is a path to file
@@ -43,7 +42,7 @@ class Blueprint implements BlueprintInterface
     }
 
     /**
-     * Validate yaml array
+     * Validate yaml array.
      *
      * @param array $yaml
      *

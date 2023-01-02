@@ -5,9 +5,10 @@ namespace HusamAwadhi\PowerParser\Blueprint\Components;
 use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
 use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidComponentException;
 use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidFieldException;
+use Iterator;
 use ReturnTypeWillChange;
 
-class Conditions implements \Iterator, ComponentInterface
+class Conditions implements ComponentInterface, Iterator
 {
     private int $position = 0;
 
@@ -18,15 +19,14 @@ class Conditions implements \Iterator, ComponentInterface
     }
 
     /**
-     * Entrypoint function
+     * Entrypoint function.
      *
-     * @param array $conditions
-     * @return self
      * @throws InvalidComponentException
      */
     public static function createFromParameters(array $conditions): self
     {
         self::validation($conditions);
+
         return new self($conditions);
     }
 
@@ -54,18 +54,19 @@ class Conditions implements \Iterator, ComponentInterface
                 ) {
                     $conditionKeyword = [
                         $case->value,
-                        $condition[$case->value]
+                        $condition[$case->value],
                     ];
+
                     break;
                 }
             }
 
-            if (sizeof($conditionKeyword) == 0) {
+            if (count($conditionKeyword) == 0) {
                 throw new InvalidFieldException('no valid condition found');
             }
             $finalConditions[] = [
                 'column' => $condition['column'],
-                $conditionKeyword[0] => $conditionKeyword[1]
+                $conditionKeyword[0] => $conditionKeyword[1],
             ];
         }
         $conditions = $finalConditions;

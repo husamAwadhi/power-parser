@@ -14,7 +14,7 @@ class ComponentsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->blueprintsDirectory =  dirname(dirname(dirname(__DIR__))) . '/storage/tests/blueprint/';
+        $this->blueprintsDirectory =  STORAGE_DIRECTORY . '/blueprint/';
     }
 
     /**

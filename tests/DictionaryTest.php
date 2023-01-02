@@ -9,12 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class DictionaryTest extends TestCase
 {
-    private string $storageTestDirectory;
-
-    protected function setUp(): void
-    {
-        $this->storageTestDirectory = dirname(__DIR__) . '/storage/tests/dictionaries/';
-    }
+    private string $storageTestDirectory = STORAGE_DIRECTORY . '/dictionaries/';
 
     public function testCreateObject()
     {

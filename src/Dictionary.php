@@ -2,8 +2,6 @@
 
 namespace HusamAwadhi\PowerParser;
 
-use HusamAwadhi\PowerParser\Helper;
-
 final class Dictionary
 {
     private const FILE = 'en';
@@ -11,33 +9,33 @@ final class Dictionary
 
     private readonly string $filePath;
 
-    public function __construct(string $filePath = null)
+    public function __construct(?string $filePath = null)
     {
         $this->filePath = $this->generateFilePath($filePath);
     }
 
-    private function generateFilePath(string $filePath = null)
+    private function generateFilePath(?string $filePath = null)
     {
-        return (is_file($filePath ?? '')
+        return is_file($filePath ?? '')
             ? $filePath
-            : dirname(__DIR__) . self::DICTIONARY_DIRECTORY . self::FILE . '.php'
-        );
+            : dirname(__DIR__) . self::DICTIONARY_DIRECTORY . self::FILE . '.php';
     }
 
     private function loadDictionary(): array
     {
         static $dictionary = [];
+
         return $dictionary[$this->filePath]
             ?? $dictionary[$this->filePath] = Helper::toOneDimensionArray(
-                require($this->filePath)
+                require $this->filePath
             );
     }
 
     public function get(string $key, mixed $default = null): mixed
     {
-        return (isset($this->loadDictionary()[$key])
+        return isset($this->loadDictionary()[$key])
             ? $this->loadDictionary()[$key]
-            : $default);
+            : $default;
     }
 
     public function getFormatted(string $key, mixed $default = null, array $values): mixed

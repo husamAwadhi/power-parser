@@ -12,12 +12,8 @@ use PHPUnit\Framework\TestCase;
 
 class BlueprintTest extends TestCase
 {
-    protected string $blueprintsDirectory = '';
+    protected string $blueprintsDirectory = STORAGE_DIRECTORY . '/blueprint/';
 
-    protected function setUp(): void
-    {
-        $this->blueprintsDirectory =  dirname(dirname(__DIR__)) . '/storage/tests/blueprint/';
-    }
 
     public function testCreateFromString()
     {
