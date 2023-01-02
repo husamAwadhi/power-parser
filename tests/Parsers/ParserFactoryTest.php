@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Parsers;
+namespace HusamAwadhi\PowerParserTests\Parsers;
 
 use PHPUnit\Framework\TestCase;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Blueprint\Components;
+namespace HusamAwadhi\PowerParserTests\Blueprint\Components;
 
 use HusamAwadhi\PowerParser\Blueprint\Components\Fields;
 use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidFieldException;

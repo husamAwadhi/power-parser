@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace HusamAwadhi\PowerParserTests;
 
 use HusamAwadhi\PowerParser\Dictionary;
 use PHPUnit\Framework\TestCase;

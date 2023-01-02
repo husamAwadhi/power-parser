@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Blueprint\Components;
+namespace HusamAwadhi\PowerParserTests\Blueprint\Components;
 
 use PHPUnit\Framework\TestCase;
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
@@ -14,7 +14,7 @@ class ComponentsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->blueprintsDirectory =  STORAGE_DIRECTORY . '/blueprint/';
+        $this->blueprintsDirectory =  STORAGE_DIRECTORY . '/blueprints/';
     }
 
     /**

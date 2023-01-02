@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Blueprint;
+namespace HusamAwadhi\PowerParserTests\Blueprint;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Blueprint\BlueprintInterface;
@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class BlueprintTest extends TestCase
 {
-    protected string $blueprintsDirectory = STORAGE_DIRECTORY . '/blueprint/';
+    protected string $blueprintsDirectory = STORAGE_DIRECTORY . '/blueprints/';
 
 
     public function testCreateFromString()
