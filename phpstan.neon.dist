@@ -10,5 +10,3 @@ parameters:
     parallel:
         processTimeout: 300.0
     checkMissingIterableValueType: false
-    # ignoreErrors:
-    #     - '~^Parameter \#2 .* of static method PHPUnit\\Framework\\Assert\:\:assert\w+\(\) expects .*, .* given\.$~'
