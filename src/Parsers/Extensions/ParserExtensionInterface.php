@@ -1,6 +1,6 @@
 <?php
 
-namespace HusamAwadhi\PowerParser\Parsers;
+namespace HusamAwadhi\PowerParser\Parsers\Extensions;
 
 interface ParserExtensionInterface
 {
