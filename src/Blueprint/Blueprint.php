@@ -3,8 +3,8 @@
 namespace HusamAwadhi\PowerParser\Blueprint;
 
 use HusamAwadhi\PowerParser\Blueprint\Components\Components;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidBlueprintException;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidComponentException;
+use HusamAwadhi\PowerParser\Exception\InvalidBlueprintException;
+use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 
 class Blueprint implements BlueprintInterface
 {

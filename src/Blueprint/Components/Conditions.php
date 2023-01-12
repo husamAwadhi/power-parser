@@ -3,8 +3,8 @@
 namespace HusamAwadhi\PowerParser\Blueprint\Components;
 
 use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidComponentException;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidFieldException;
+use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
+use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use Iterator;
 use ReturnTypeWillChange;
 

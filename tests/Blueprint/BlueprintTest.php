@@ -6,8 +6,8 @@ namespace HusamAwadhi\PowerParserTests\Blueprint;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Blueprint\BlueprintInterface;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidBlueprintException;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidComponentException;
+use HusamAwadhi\PowerParser\Exception\InvalidBlueprintException;
+use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 use PHPUnit\Framework\TestCase;
 
 class BlueprintTest extends TestCase

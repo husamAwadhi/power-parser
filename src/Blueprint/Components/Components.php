@@ -3,8 +3,8 @@
 namespace HusamAwadhi\PowerParser\Blueprint\Components;
 
 use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidComponentException;
 use HusamAwadhi\PowerParser\Blueprint\Type;
+use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 use Iterator;
 use ReturnTypeWillChange;
 

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace HusamAwadhi\PowerParserTests\Parsers;
+namespace HusamAwadhi\PowerParserTests\Parsers\Extensions;
 
 use PHPUnit\Framework\TestCase;
 
-class ParserFactoryTest extends TestCase
+class ExcelTest extends TestCase
 {
     public function testDummy()
     {

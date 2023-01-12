@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace HusamAwadhi\PowerParserTests\Blueprint\Components;
 
 use HusamAwadhi\PowerParser\Blueprint\Components\Fields;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidFieldException;
+use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use PHPUnit\Framework\TestCase;
 
 class FieldsTest extends TestCase

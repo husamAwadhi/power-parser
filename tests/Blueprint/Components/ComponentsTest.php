@@ -6,7 +6,7 @@ namespace HusamAwadhi\PowerParserTests\Blueprint\Components;
 
 use PHPUnit\Framework\TestCase;
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidComponentException;
+use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 
 class ComponentsTest extends TestCase
 {
