@@ -26,7 +26,7 @@ class Blueprint implements BlueprintInterface
      * @throws InvalidBlueprintException
      * @throws InvalidComponentException
      */
-    public static function createBlueprint(string $stream, bool $isPath = false): self | null
+    public static function createBlueprint(string $stream, bool $isPath = false): self
     {
         $parsedFile = self::parseYaml($stream, $isPath);
 

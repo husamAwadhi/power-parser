@@ -10,12 +10,7 @@ use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 
 class ComponentsTest extends TestCase
 {
-    protected string $blueprintsDirectory = '';
-
-    protected function setUp(): void
-    {
-        $this->blueprintsDirectory =  STORAGE_DIRECTORY . '/blueprints/';
-    }
+    protected string $blueprintsDirectory = STORAGE_DIRECTORY . '/blueprints/';
 
     /**
      * @dataProvider invalidFilesProvider

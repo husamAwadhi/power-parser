@@ -8,7 +8,7 @@ use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Exception\InvalidExtensionException;
 use HusamAwadhi\PowerParser\Exception\MissingElementException;
-use HusamAwadhi\PowerParser\Parser\Extensions\Excel;
+use HusamAwadhi\PowerParser\Parser\Extension\Excel;
 use HusamAwadhi\PowerParser\Parser\Parser;
 use HusamAwadhi\PowerParser\Parser\ParserBuilder;
 use PHPUnit\Framework\TestCase;

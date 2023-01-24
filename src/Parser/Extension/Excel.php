@@ -1,6 +1,6 @@
 <?php
 
-namespace HusamAwadhi\PowerParser\Parser\Extensions;
+namespace HusamAwadhi\PowerParser\Parser\Extension;
 
 class Excel implements ParserExtensionInterface
 {

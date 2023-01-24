@@ -6,7 +6,7 @@ use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Exception\InvalidExtensionException;
 use HusamAwadhi\PowerParser\Exception\MissingElementException;
-use HusamAwadhi\PowerParser\Parser\Extensions\ParserExtensionInterface;
+use HusamAwadhi\PowerParser\Parser\Extension\ParserExtensionInterface;
 
 class ParserBuilder
 {
