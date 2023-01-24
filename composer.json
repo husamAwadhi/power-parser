@@ -40,6 +40,10 @@
         }
     ],
     "scripts": {
+        "test": "phpunit --color=always",
+        "fix": "php-cs-fixer fix --ansi",
+        "analyse": "phpstan analyse --ansi",
+        "cs": "phpcs",
         "check": [
             "php-cs-fixer fix --ansi --dry-run --diff",
             "phpcs",

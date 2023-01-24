@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace HusamAwadhi\PowerParserTests\Parsers;
+namespace HusamAwadhi\PowerParserTests\Parser;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Exception\InvalidExtensionException;
 use HusamAwadhi\PowerParser\Exception\MissingElementException;
-use HusamAwadhi\PowerParser\Parsers\Extensions\Excel;
-use HusamAwadhi\PowerParser\Parsers\Parser;
-use HusamAwadhi\PowerParser\Parsers\ParserBuilder;
+use HusamAwadhi\PowerParser\Parser\Extensions\Excel;
+use HusamAwadhi\PowerParser\Parser\Parser;
+use HusamAwadhi\PowerParser\Parser\ParserBuilder;
 use PHPUnit\Framework\TestCase;
 
 class ParserBuilderTest extends TestCase

@@ -1,12 +1,12 @@
 <?php
 
-namespace HusamAwadhi\PowerParser\Parsers;
+namespace HusamAwadhi\PowerParser\Parser;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Exception\InvalidExtensionException;
 use HusamAwadhi\PowerParser\Exception\MissingElementException;
-use HusamAwadhi\PowerParser\Parsers\Extensions\ParserExtensionInterface;
+use HusamAwadhi\PowerParser\Parser\Extensions\ParserExtensionInterface;
 
 class ParserBuilder
 {
@@ -84,10 +84,11 @@ class ParserBuilder
     {
         $this->validateArguments();
 
-        $parser = new Parser($this->blueprint, $this->fileContent);
-        foreach ($this->extensions as $ext) {
-            $parser->addExtension($ext);
-        }
+        $parser = new Parser(
+            $this->blueprint,
+            $this->fileContent,
+            $this->extensions,
+        );
 
         return $parser;
     }
