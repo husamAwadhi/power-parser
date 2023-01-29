@@ -6,9 +6,9 @@ namespace HusamAwadhi\PowerParserTests\Parser;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
-use HusamAwadhi\PowerParser\Exception\InvalidExtensionException;
+use HusamAwadhi\PowerParser\Exception\InvalidPLuginException;
 use HusamAwadhi\PowerParser\Exception\MissingElementException;
-use HusamAwadhi\PowerParser\Parser\Extension\Excel;
+use HusamAwadhi\PowerParser\Parser\Extension\Spreadsheet\Spreadsheet;
 use HusamAwadhi\PowerParser\Parser\Parser;
 use HusamAwadhi\PowerParser\Parser\ParserBuilder;
 use PHPUnit\Framework\TestCase;
@@ -24,8 +24,8 @@ class ParserBuilderTest extends TestCase
         $blueprint = Blueprint::createBlueprint($this->blueprintsDirectory . 'valid.yaml', true);
 
         $parser = $builder->addBlueprint($blueprint)
-            ->addFileFromPath($this->excelFile)
-            ->registerExtension(new Excel())
+            ->addFile($this->excelFile)
+            ->registerExtension(new Spreadsheet())
             ->build();
 
         $this->assertInstanceOf(Parser::class, $parser);
@@ -37,8 +37,8 @@ class ParserBuilderTest extends TestCase
 
         $builder = new ParserBuilder();
 
-        $builder->addFileFromPath($this->excelFile)
-            ->registerExtension(new Excel())
+        $builder->addFile($this->excelFile)
+            ->registerExtension(new Spreadsheet())
             ->build();
     }
 
@@ -50,7 +50,7 @@ class ParserBuilderTest extends TestCase
         $blueprint = Blueprint::createBlueprint($this->blueprintsDirectory . 'valid.yaml', true);
 
         $builder->addBlueprint($blueprint)
-            ->registerExtension(new Excel())
+            ->registerExtension(new Spreadsheet())
             ->build();
     }
 
@@ -60,19 +60,19 @@ class ParserBuilderTest extends TestCase
 
         $builder = new ParserBuilder();
 
-        $builder->addFileFromPath($this->excelFile . 'legit')
-            ->registerExtension(new Excel())
+        $builder->addFile($this->excelFile . 'legit')
+            ->registerExtension(new Spreadsheet())
             ->build();
     }
 
     public function testExceptionWhenRegisteringDuplicateExtension()
     {
-        $this->expectException(InvalidExtensionException::class);
+        $this->expectException(InvalidPLuginException::class);
 
         $builder = new ParserBuilder();
 
-        $builder->registerExtension(new Excel())
-            ->registerExtension(new Excel())
+        $builder->registerExtension(new Spreadsheet())
+            ->registerExtension(new Spreadsheet())
             ->build();
     }
 }

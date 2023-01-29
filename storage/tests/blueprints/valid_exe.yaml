@@ -1,0 +1,16 @@
+version: "1.0"
+meta:
+  file:
+    extension: exe
+    name: "sample"
+blueprint:
+  - mandatory: true
+    type: hit
+    conditions:
+      - column: [1]
+        is: "رقم الصندوق"
+    fields:
+      - name: currency
+        position: 6
+      - name: cashier
+        position: 2

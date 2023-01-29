@@ -3,13 +3,15 @@
 namespace HusamAwadhi\PowerParser\Parser;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
-use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
-use HusamAwadhi\PowerParser\Exception\InvalidExtensionException;
+use HusamAwadhi\PowerParser\Exception\InvalidPLuginException;
 use HusamAwadhi\PowerParser\Exception\MissingElementException;
-use HusamAwadhi\PowerParser\Parser\Extension\ParserExtensionInterface;
+use HusamAwadhi\PowerParser\Parser\Extension\ParserPluginInterface;
 
 class ParserBuilder
 {
+    use IOCapable;
+
+    /** @var ParserPluginInterface[] list of accepted extensions */
     protected array $extensions = [];
 
     protected Blueprint $blueprint;
@@ -21,10 +23,10 @@ class ParserBuilder
     ) {
     }
 
-    public function registerExtension(ParserExtensionInterface $ext): self
+    public function registerExtension(ParserPluginInterface $ext): self
     {
         if (isset($this->extensions[$ext::class])) {
-            throw new InvalidExtensionException('Extension already registered');
+            throw new InvalidPLuginException('Extension already registered');
         }
         $this->extensions[$ext::class] = $ext;
 
@@ -38,33 +40,9 @@ class ParserBuilder
         return $this;
     }
 
-    public function addFileFromPath(string $path): self
+    public function addFile(string $path): self
     {
-        if (!is_file($path)) {
-            throw new InvalidArgumentException("file can not be found at: {$path}");
-        }
-
-        $this->fileContent = \file_get_contents($path, length: $this->maxFileLength);
-
-        if ($this->fileContent === false) {
-            throw new InvalidArgumentException("unable to load file: {$path}");
-        }
-
-        return $this;
-    }
-
-    public function addFileFromLink(string $url): self
-    {
-        if (!filter_var($url, \FILTER_VALIDATE_URL)) {
-            throw new InvalidArgumentException("Link is not valid: {$url}");
-        }
-
-        // TODO: use curl ... maybe
-        $this->fileContent = \file_get_contents($url, length: $this->maxFileLength);
-
-        if ($this->fileContent === false) {
-            throw new InvalidArgumentException("unable to load file from link: {$url}");
-        }
+        $this->fileContent = $this->load($path, length: $this->maxFileLength);
 
         return $this;
     }
