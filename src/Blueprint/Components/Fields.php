@@ -26,6 +26,7 @@ class Fields implements ComponentInterface, Iterator
     {
         self::validation($fields);
 
+        $objectFields = [];
         foreach ($fields as $field) {
             $objectFields[] = Field::from($field['name'], $field['position']);
         }
