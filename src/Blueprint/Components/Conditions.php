@@ -3,6 +3,7 @@
 namespace HusamAwadhi\PowerParser\Blueprint\Components;
 
 use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
+use HusamAwadhi\PowerParser\Blueprint\ValueObject\Condition;
 use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use Iterator;
@@ -13,6 +14,7 @@ class Conditions implements ComponentInterface, Iterator
     private int $position = 0;
 
     public function __construct(
+        /** @var Condition[] */
         public readonly array $conditions
     ) {
         $this->position = 0;
@@ -53,7 +55,7 @@ class Conditions implements ComponentInterface, Iterator
                     is_string($condition[$case->value])
                 ) {
                     $conditionKeyword = [
-                        $case->value,
+                        $case,
                         $condition[$case->value],
                     ];
 
@@ -64,10 +66,11 @@ class Conditions implements ComponentInterface, Iterator
             if (count($conditionKeyword) == 0) {
                 throw new InvalidFieldException('no valid condition found');
             }
-            $finalConditions[] = [
-                'column' => $condition['column'],
-                $conditionKeyword[0] => $conditionKeyword[1],
-            ];
+            $finalConditions[] = Condition::from(
+                $condition['column'],
+                $conditionKeyword[0],
+                $conditionKeyword[1],
+            );
         }
         $conditions = $finalConditions;
     }

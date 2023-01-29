@@ -4,6 +4,7 @@ namespace HusamAwadhi\PowerParser\Blueprint\Components;
 
 use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
 use HusamAwadhi\PowerParser\Blueprint\Type;
+use HusamAwadhi\PowerParser\Blueprint\ValueObject\Component;
 use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 use Iterator;
 use ReturnTypeWillChange;
@@ -16,6 +17,7 @@ class Components implements ComponentInterface, Iterator
 
     private $position = 0;
 
+    /** @var Component[] */
     private readonly array $elements;
 
     protected function __construct(
@@ -29,14 +31,7 @@ class Components implements ComponentInterface, Iterator
     {
         $components = [];
         foreach ($elements as $element) {
-            $components[] = [
-                'type' => Type::from($element['type']),
-                'fields' => Fields::createFromParameters($element['fields']),
-                'mandatory' => (bool) ($element['mandatory'] ?? false),
-                'conditions' => ($element['type'] == Type::NEXT->value
-                    ? []
-                    : Conditions::createFromParameters($element['conditions'])),
-            ];
+            $components[] = Component::from($element);
         }
 
         return $components;

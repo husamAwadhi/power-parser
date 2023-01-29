@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HusamAwadhi\PowerParserTests\Blueprint\Components;
 
 use HusamAwadhi\PowerParser\Blueprint\Components\Fields;
+use HusamAwadhi\PowerParser\Blueprint\ValueObject\Field;
 use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use PHPUnit\Framework\TestCase;
 
@@ -29,8 +30,8 @@ class FieldsTest extends TestCase
                     ['name' => 'field2', 'position' => 3],
                 ],
                 [
-                    ['name' => 'field1', 'position' => 2],
-                    ['name' => 'field2', 'position' => 3],
+                    Field::from('field1', 2),
+                    Field::from('field2', 3),
                 ],
             ],
         ];

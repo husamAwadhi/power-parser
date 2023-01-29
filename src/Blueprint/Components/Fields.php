@@ -3,6 +3,7 @@
 namespace HusamAwadhi\PowerParser\Blueprint\Components;
 
 use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
+use HusamAwadhi\PowerParser\Blueprint\ValueObject\Field;
 use HusamAwadhi\PowerParser\Dictionary;
 use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use Iterator;
@@ -15,17 +16,21 @@ class Fields implements ComponentInterface, Iterator
     private int $position = 0;
 
     public function __construct(
+        /** @var Field[] */
         public readonly array $fields,
     ) {
         $this->position = 0;
-        // $this->dict = new Dictionary();
     }
 
     public static function createFromParameters(array $fields): self
     {
         self::validation($fields);
 
-        return new self($fields);
+        foreach ($fields as $field) {
+            $objectFields[] = Field::from($field['name'], $field['position']);
+        }
+
+        return new self($objectFields);
     }
 
     /**
