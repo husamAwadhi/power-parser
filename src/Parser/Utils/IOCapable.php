@@ -1,6 +1,6 @@
 <?php
 
-namespace HusamAwadhi\PowerParser\Parser;
+namespace HusamAwadhi\PowerParser\Parser\Utils;
 
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Exception\UnableToCreateFileException;

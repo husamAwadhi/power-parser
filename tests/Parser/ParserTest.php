@@ -36,6 +36,11 @@ class ParserTest extends TestCase
             {
                 return $this;
             }
+
+            public function getFiltered(): array
+            {
+                return [];
+            }
         };
 
         $this->dummyPlugin2 = new class implements ParserPluginInterface
@@ -48,6 +53,11 @@ class ParserTest extends TestCase
             public function parse(string $s, Blueprint $b): self
             {
                 return $this;
+            }
+
+            public function getFiltered(): array
+            {
+                return [];
             }
         };
     }

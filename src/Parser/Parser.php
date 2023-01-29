@@ -92,7 +92,7 @@ class Parser implements ParserInterface
      */
     public function getAsArray(): array
     {
-        return $this->getParsedContentPlugin()->data ?? [];
+        return $this->getParsedContentPlugin()->getFiltered();
     }
 
     /**

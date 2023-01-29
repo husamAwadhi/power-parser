@@ -14,6 +14,7 @@ class ReadFilter implements IReadFilter
 
     public function readCell($columnAddress, $row, $worksheetName = '')
     {
-        return $row === 3;
+        //TODO: find a useful way of pre filtering unwanted rows.
+        return true;
     }
 }

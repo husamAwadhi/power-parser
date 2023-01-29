@@ -4,10 +4,10 @@ namespace HusamAwadhi\PowerParser\Parser\Extension\Spreadsheet;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Parser\Extension\ParserPluginInterface;
-use HusamAwadhi\PowerParser\Parser\IOCapable;
+use HusamAwadhi\PowerParser\Parser\Utils\BlueprintInterpreter;
+use HusamAwadhi\PowerParser\Parser\Utils\IOCapable;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet as PhpSpreadsheet;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
  * abstract layer for phpoffice/phpspreadsheet
@@ -16,10 +16,13 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class Spreadsheet implements ParserPluginInterface
 {
     use IOCapable;
+    use BlueprintInterpreter;
 
     protected PhpSpreadsheet $spreadsheet;
 
-    public array $data;
+    protected Blueprint $blueprint;
+
+    protected array $data;
 
     // reference: https://phpspreadsheet.readthedocs.io/en/latest/topics/file-formats/
     protected array $supportedExtensions = [
@@ -50,6 +53,7 @@ class Spreadsheet implements ParserPluginInterface
      */
     public function parse(string $fileContent, Blueprint $blueprint): self
     {
+        $this->blueprint = $blueprint;
         $reader = IOFactory::createReader(ucfirst($blueprint->extension));
         $reader->setReadDataOnly(true);
         $reader->setReadFilter(new ReadFilter($blueprint));
@@ -60,7 +64,10 @@ class Spreadsheet implements ParserPluginInterface
         foreach ($sheets as $sheet) {
             $this->data[] = [
                 'title' => $sheet->getTitle(),
-                'content' => $this->toArray($sheet),
+                'content' => array_filter(
+                    $sheet->toArray(),
+                    fn ($value) => \array_unique($value) !== [null]
+                ),
             ];
         }
 
@@ -69,14 +76,13 @@ class Spreadsheet implements ParserPluginInterface
         return $this;
     }
 
-    /**
-     * Filters out null rows.
-     */
-    protected function toArray(Worksheet $sheet): array
+    public function filterSheet(array $sheet, Blueprint $blueprint): array
     {
-        return array_filter(
-            $sheet->toArray(),
-            fn ($value) => \array_unique($value) !== [null]
-        );
+        return $sheet;
+    }
+
+    public function getFiltered(): array
+    {
+        return $this->filterSheet($this->data, $this->blueprint);
     }
 }
