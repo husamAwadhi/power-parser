@@ -17,7 +17,7 @@ class ComponentsTest extends TestCase
 {
     protected string $blueprintsDirectory = STORAGE_DIRECTORY . '/blueprints/';
 
-    protected MockObject $helper;
+    protected $helper;
 
     public function setUp(): void
     {

@@ -18,7 +18,8 @@ class Conditions implements ComponentInterface, Iterator
 
     public function __construct(
         /** @var Condition[] */
-        array $conditions
+        array $conditions,
+        protected BlueprintHelper $helper
     ) {
         $this->conditions = $this->buildConditions($conditions);
         $this->position = 0;
@@ -54,7 +55,7 @@ class Conditions implements ComponentInterface, Iterator
     {
         self::validation($conditions);
 
-        return new self($conditions);
+        return new self($conditions, $helper);
     }
 
     /**
