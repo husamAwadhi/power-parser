@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace HusamAwadhi\PowerParserTests\Parser;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
+use HusamAwadhi\PowerParser\Blueprint\BlueprintBuilder;
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Exception\InvalidPLuginException;
 use HusamAwadhi\PowerParser\Exception\MissingElementException;
@@ -21,7 +23,9 @@ class ParserBuilderTest extends TestCase
     public function testParserCreatedSuccessfully()
     {
         $builder = new ParserBuilder();
-        $blueprint = Blueprint::createBlueprint($this->blueprintsDirectory . 'valid.yaml', true);
+        $blueprintBuilder = new BlueprintBuilder(new BlueprintHelper());
+        $blueprintBuilder->load($this->blueprintsDirectory . 'valid.yaml');
+        $blueprint = $blueprintBuilder->build();
 
         $parser = $builder->addBlueprint($blueprint)
             ->addFile($this->excelFile)
@@ -47,7 +51,9 @@ class ParserBuilderTest extends TestCase
         $this->expectException(MissingElementException::class);
 
         $builder = new ParserBuilder();
-        $blueprint = Blueprint::createBlueprint($this->blueprintsDirectory . 'valid.yaml', true);
+        $blueprintBuilder = new BlueprintBuilder(new BlueprintHelper());
+        $blueprintBuilder->load($this->blueprintsDirectory . 'valid.yaml');
+        $blueprint = $blueprintBuilder->build();
 
         $builder->addBlueprint($blueprint)
             ->registerExtension(new Spreadsheet())

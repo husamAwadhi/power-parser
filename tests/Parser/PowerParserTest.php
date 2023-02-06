@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace HusamAwadhi\PowerParserTests\Parser;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
+use HusamAwadhi\PowerParser\Blueprint\BlueprintBuilder;
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
 use HusamAwadhi\PowerParser\Parser\ParserBuilder;
 use HusamAwadhi\PowerParser\Parser\PowerParser;
 use PHPUnit\Framework\TestCase;
@@ -29,7 +31,11 @@ class PowerParserTest extends TestCase
 
     public function testSuccessfullyCreateBlueprint()
     {
-        $blueprint = $this->powerParser->createBlueprint($this->blueprintsDirectory . 'valid.yaml', true);
+        $blueprint = $this->powerParser->createBlueprint(
+            $this->blueprintsDirectory . 'valid.yaml',
+            new BlueprintBuilder(new BlueprintHelper()),
+            true
+        );
 
         $this->assertInstanceOf(Blueprint::class, $blueprint);
     }

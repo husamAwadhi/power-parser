@@ -3,8 +3,7 @@
 namespace HusamAwadhi\PowerParser\Parser\Extension\Spreadsheet;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
-use HusamAwadhi\PowerParser\Parser\Extension\ParserPluginInterface;
-use HusamAwadhi\PowerParser\Parser\Utils\BlueprintInterpreter;
+use HusamAwadhi\PowerParser\Parser\Extension\BlueprintInterpreter;
 use HusamAwadhi\PowerParser\Parser\Utils\IOCapable;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet as PhpSpreadsheet;
@@ -13,10 +12,9 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet as PhpSpreadsheet;
  * abstract layer for phpoffice/phpspreadsheet
  * refer to docs. https://phpspreadsheet.readthedocs.io/en/latest/.
  */
-class Spreadsheet implements ParserPluginInterface
+class Spreadsheet extends BlueprintInterpreter
 {
     use IOCapable;
-    use BlueprintInterpreter;
 
     protected PhpSpreadsheet $spreadsheet;
 

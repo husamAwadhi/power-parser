@@ -12,6 +12,7 @@ class Component
         public readonly Type $type,
         public readonly Fields $fields,
         public readonly bool $mandatory,
+        public readonly bool $table,
         public readonly ?Conditions $conditions = null,
     ) {
     }
@@ -20,11 +21,10 @@ class Component
     {
         return new self(
             type: Type::from($component['type']),
-            fields: Fields::createFromParameters($component['fields']),
+            fields: $component['fields'],
             mandatory: (bool) ($component['mandatory'] ?? false),
-            conditions: ($component['type'] == Type::NEXT->value
-                ? null
-                : Conditions::createFromParameters($component['conditions'])),
+            table: (bool) ($component['table'] ?? false),
+            conditions: ($component['conditions'] ?? null),
         );
     }
 }

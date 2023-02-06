@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HusamAwadhi\PowerParserTests\Blueprint;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
 use HusamAwadhi\PowerParser\Blueprint\BlueprintInterface;
 use HusamAwadhi\PowerParser\Exception\InvalidBlueprintException;
 use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
@@ -14,46 +15,26 @@ class BlueprintTest extends TestCase
 {
     protected string $blueprintsDirectory = STORAGE_DIRECTORY . '/blueprints/';
 
-
-    public function testCreateFromString()
+    public function testSuccessfullyCreateBlueprint()
     {
         $rawFile = file_get_contents($this->blueprintsDirectory .  'valid.yaml');
-        $blueprint = Blueprint::createBlueprint($rawFile);
-        $this->assertInstanceOf(BlueprintInterface::class, $blueprint);
-    }
+        $blueprint = Blueprint::from(
+            \yaml_parse($rawFile),
+            $this->blueprintsDirectory .  'valid.yaml',
+            new BlueprintHelper()
+        );
 
-    public function testCreateFromPath()
-    {
-        $path = $this->blueprintsDirectory .  'valid.yaml';
-        $blueprint = Blueprint::createBlueprint($path, true);
         $this->assertInstanceOf(BlueprintInterface::class, $blueprint);
     }
 
     /**
-     * @dataProvider emptyStreamsProvider
-     */
-    public function testThrowingExceptionOnEmptyStream(string $stream, bool $isPath)
-    {
-        $this->expectException(InvalidBlueprintException::class);
-        Blueprint::createBlueprint($stream, $isPath);
-    }
-    public function emptyStreamsProvider()
-    {
-        return [
-            ['', false],
-            ['', true],
-        ];
-    }
-
-    /**
-     * @depends testCreateFromPath
      * @dataProvider invalidFilesProvider
      */
     public function testThrowingExceptionOnInvalidBlueprint(string $fileName, string $exception)
     {
         $this->expectException($exception);
         $path = $this->blueprintsDirectory . $fileName . '.yaml';
-        Blueprint::createBlueprint($path, true);
+        Blueprint::from(\yaml_parse_file($path), 'some-path', new BlueprintHelper());
     }
     public function invalidFilesProvider()
     {

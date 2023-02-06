@@ -2,6 +2,7 @@
 
 namespace HusamAwadhi\PowerParser\Blueprint\Components;
 
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
 use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
 use HusamAwadhi\PowerParser\Blueprint\Type;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Component;
@@ -18,30 +19,36 @@ class Components implements ComponentInterface, Iterator
     private $position = 0;
 
     /** @var Component[] */
-    private readonly array $elements;
+    public readonly array $components;
 
-    protected function __construct(
-        array $elements
+    public function __construct(
+        array $elements,
+        protected BlueprintHelper $helper,
     ) {
         $this->position = 0;
-        $this->elements = $this->buildElements($elements);
+        $this->components = $this->buildElements($elements);
     }
 
     protected function buildElements(array $elements = []): array
     {
         $components = [];
         foreach ($elements as $element) {
-            $components[] = Component::from($element);
+            $element['fields'] = $this->helper->createFields($element['fields']);
+            $element['conditions'] = ($element['type'] == Type::NEXT->value
+                ? null
+                : $this->helper->createConditions($element['conditions']));
+
+            $components[] = Component::from(component: $element);
         }
 
         return $components;
     }
 
-    public static function createFromParameters(array $elements): self
+    public static function from(array $elements, BlueprintHelper $helper): self
     {
         self::validation($elements);
 
-        return new self($elements);
+        return new self($elements, $helper);
     }
 
     /**
@@ -61,7 +68,7 @@ class Components implements ComponentInterface, Iterator
 
             if (!Type::tryFrom($element['type'])) {
                 throw new InvalidComponentException(
-                    \sprintf(self::INVALID_VALUE, "type (#$i)", $element['type'], implode(',', array_column(Type::cases(), 'value')))
+                    \sprintf(self::INVALID_VALUE, "type (#$i)", $element['type'], implode(', ', array_column(Type::cases(), 'value')))
                 );
             }
 
@@ -91,7 +98,7 @@ class Components implements ComponentInterface, Iterator
     #[ReturnTypeWillChange]
     public function current()
     {
-        return $this->elements[$this->position];
+        return $this->components[$this->position];
     }
 
     #[ReturnTypeWillChange]
@@ -107,6 +114,6 @@ class Components implements ComponentInterface, Iterator
 
     public function valid(): bool
     {
-        return isset($this->elements[$this->position]);
+        return isset($this->components[$this->position]);
     }
 }

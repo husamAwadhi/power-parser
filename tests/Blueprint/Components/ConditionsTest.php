@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace HusamAwadhi\PowerParserTests\Blueprint\Components;
 
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
 use HusamAwadhi\PowerParser\Blueprint\Components\ConditionKeyword;
 use HusamAwadhi\PowerParser\Blueprint\Components\Conditions;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Condition;
@@ -17,7 +18,7 @@ class ConditionsTest extends TestCase
      */
     public function testCreateFromParameters($parametersArray, $expected)
     {
-        $conditions = Conditions::createFromParameters($parametersArray);
+        $conditions = Conditions::from($parametersArray, new BlueprintHelper());
 
         $this->assertIsIterable($conditions);
         $this->assertEquals($conditions->conditions, $expected);
@@ -54,7 +55,7 @@ class ConditionsTest extends TestCase
     public function testCreateFromInvalidParameters($parametersArray, $exception)
     {
         $this->expectException($exception);
-        $_ = Conditions::createFromParameters($parametersArray);
+        $_ = Conditions::from($parametersArray, new BlueprintHelper());
     }
     public function invalidParametersDataProvider()
     {

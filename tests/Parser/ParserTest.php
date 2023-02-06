@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace HusamAwadhi\PowerParserTests\Parser;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
+use HusamAwadhi\PowerParser\Blueprint\BlueprintBuilder;
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Exception\UnsupportedExtensionException;
 use HusamAwadhi\PowerParser\Parser\Extension\ParserPluginInterface;
 use HusamAwadhi\PowerParser\Parser\Extension\Spreadsheet\Spreadsheet;
 use HusamAwadhi\PowerParser\Parser\Parser;
 use PHPUnit\Framework\TestCase;
-// use stdClass;
 
 class ParserTest extends TestCase
 {
@@ -23,7 +24,9 @@ class ParserTest extends TestCase
 
     public function setUp(): void
     {
-        $this->blueprint = Blueprint::createBlueprint($this->blueprintsDirectory . 'valid.yaml', true);
+        $builder = new BlueprintBuilder(new BlueprintHelper());
+        $builder->load($this->blueprintsDirectory . 'valid.yaml');
+        $this->blueprint = $builder->build();
 
         $this->dummyPlugin = new class implements ParserPluginInterface
         {
@@ -96,7 +99,9 @@ class ParserTest extends TestCase
 
     public function testSuccessfullyGetRecommendedPlugin()
     {
-        $blueprint = Blueprint::createBlueprint($this->blueprintsDirectory . 'valid_exe.yaml', true);
+        $builder = new BlueprintBuilder(new BlueprintHelper());
+        $builder->load($this->blueprintsDirectory . 'valid_exe.yaml');
+        $blueprint = $builder->build();
 
         $parser = new Parser(
             $blueprint,
@@ -112,7 +117,9 @@ class ParserTest extends TestCase
 
     public function testSuccessfullyOverrideRecommendedPlugin()
     {
-        $blueprint = Blueprint::createBlueprint($this->blueprintsDirectory . 'valid_exe.yaml', true);
+        $builder = new BlueprintBuilder(new BlueprintHelper());
+        $builder->load($this->blueprintsDirectory . 'valid_exe.yaml');
+        $blueprint = $builder->build();
 
         $parser = new Parser(
             $blueprint,

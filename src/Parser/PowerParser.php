@@ -3,6 +3,7 @@
 namespace HusamAwadhi\PowerParser\Parser;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
+use HusamAwadhi\PowerParser\Blueprint\BlueprintBuilder;
 
 class PowerParser implements PowerParserInterface
 {
@@ -17,8 +18,14 @@ class PowerParser implements PowerParserInterface
     /**
      * @inheritDoc
      */
-    public function createBlueprint(string $stream, bool $isPath = false): Blueprint
+    public function createBlueprint(string $stream, BlueprintBuilder $builder, bool $isPath = false): Blueprint
     {
-        return Blueprint::createBlueprint(stream: $stream, isPath: $isPath);
+        if ($isPath) {
+            $builder->load($stream);
+        } else {
+            $builder->parse($stream);
+        }
+
+        return $builder->build();
     }
 }

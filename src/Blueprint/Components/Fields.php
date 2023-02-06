@@ -2,6 +2,7 @@
 
 namespace HusamAwadhi\PowerParser\Blueprint\Components;
 
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
 use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Field;
 use HusamAwadhi\PowerParser\Dictionary;
@@ -15,23 +16,32 @@ class Fields implements ComponentInterface, Iterator
 
     private int $position = 0;
 
+    public readonly array $fields;
+
     public function __construct(
         /** @var Field[] */
-        public readonly array $fields,
+        array $fields,
+        protected BlueprintHelper $helper,
     ) {
+        $this->fields = $this->buildFields($fields);
         $this->position = 0;
     }
 
-    public static function createFromParameters(array $fields): self
+    protected function buildFields(array $fields): array
     {
-        self::validation($fields);
-
         $objectFields = [];
         foreach ($fields as $field) {
             $objectFields[] = Field::from($field['name'], $field['position']);
         }
 
-        return new self($objectFields);
+        return $objectFields;
+    }
+
+    public static function from(array $fields, BlueprintHelper $helper): self
+    {
+        self::validation($fields);
+
+        return new self($fields, $helper);
     }
 
     /**

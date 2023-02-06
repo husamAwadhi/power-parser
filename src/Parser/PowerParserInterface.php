@@ -3,6 +3,7 @@
 namespace HusamAwadhi\PowerParser\Parser;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
+use HusamAwadhi\PowerParser\Blueprint\BlueprintBuilder;
 
 interface PowerParserInterface
 {
@@ -14,5 +15,5 @@ interface PowerParserInterface
     /**
      * create PowerParser blueprint object.
      */
-    public function createBlueprint(string $stream, bool $isPath = false): Blueprint;
+    public function createBlueprint(string $stream, BlueprintBuilder $builder, bool $isPath = false): Blueprint;
 }
