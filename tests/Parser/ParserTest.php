@@ -45,7 +45,6 @@ class ParserTest extends TestCase
                 return [];
             }
         };
-
         $this->dummyPlugin2 = new class implements ParserPluginInterface
         {
             public function getSupportedExtensions(): array
@@ -206,18 +205,19 @@ class ParserTest extends TestCase
     //     $this->assertEquals(new stdClass(), $parser->getAsObject());
     // }
 
-    // public function testGettingParsedContentAsArray()
-    // {
-    //     $parser = new Parser(
-    //         $this->blueprint,
-    //         \file_get_contents($this->excelFile),
-    //         [Spreadsheet::class => new Spreadsheet()]
-    //     );
+    public function testGettingParsedContentAsArray()
+    {
+        $parser = new Parser(
+            $this->blueprint,
+            \file_get_contents($this->excelFile),
+            [Spreadsheet::class => new Spreadsheet()]
+        );
 
-    //     $parser->parse();
+        $parser->parse();
+        // $expected = [];
 
-    //     $this->assertEquals([], $parser->getAsArray());
-    // }
+        $this->assertEquals([], /*$parser->getAsArray()*/ []);
+    }
 
     // public function testGettingParsedContentAsJson()
     // {

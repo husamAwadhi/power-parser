@@ -11,7 +11,6 @@ use HusamAwadhi\PowerParser\Blueprint\Components\Components;
 use HusamAwadhi\PowerParser\Blueprint\Components\Conditions;
 use HusamAwadhi\PowerParser\Blueprint\Components\Fields;
 use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
-use PHPUnit\Framework\MockObject\MockObject;
 
 class ComponentsTest extends TestCase
 {
@@ -52,10 +51,13 @@ class ComponentsTest extends TestCase
 
         $helper = clone $this->helper;
         foreach ($parametersArray as $component) {
-            $helper->expects($this->exactly(sizeof($parametersArray)))->method('createFields')->with($component['fields'])->willReturn(new Fields($component['fields'], new BlueprintHelper()));
+            $helper->expects($this->exactly(sizeof($parametersArray)))
+                ->method('createFields')->with($component['fields'])
+                ->willReturn(new Fields($component['fields'], new BlueprintHelper()));
 
             if (isset($component['conditions'])) {
-                $helper->method('createConditions')->with($component['conditions'])->willReturn(new Conditions($component['conditions'], new BlueprintHelper()));
+                $helper->method('createConditions')->with($component['conditions'])
+                    ->willReturn(new Conditions($component['conditions'], new BlueprintHelper()));
             }
         }
 

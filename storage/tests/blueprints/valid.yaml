@@ -8,7 +8,7 @@ blueprint:
     type: hit
     conditions:
       - column: [1]
-        is: "رقم الصندوق"
+        is: "Cashier Number"
     fields:
       - name: currency
         position: 6
@@ -19,7 +19,7 @@ blueprint:
     table: true
     conditions:
       - column: [1]
-        isNot: "null"
+        isNot: "{null}"
     fields:
       - name: date
         position: 1

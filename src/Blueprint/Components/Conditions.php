@@ -37,7 +37,7 @@ class Conditions implements ComponentInterface, Iterator
                 $value = $condition['value'];
             }
             $objectConditions[] = Condition::from(
-                column: $condition['column'],
+                columns: $condition['column'],
                 keyword: $case,
                 value: $value,
             );

@@ -65,9 +65,14 @@ class Parser implements ParserInterface
             );
         }
 
-        $validRecommendation = (isset($this->plugins[$overridePlugin]) && in_array($this->blueprint->extension, $this->plugins[$overridePlugin]->getSupportedExtensions()));
+        $validRecommendation = (
+            isset($this->plugins[$overridePlugin])
+            && in_array($this->blueprint->extension, $this->plugins[$overridePlugin]->getSupportedExtensions())
+        );
 
-        return $this->plugins[$validRecommendation ? $overridePlugin : $this->supportedExtensions[$this->blueprint->extension]];
+        return $this->plugins[$validRecommendation
+            ? $overridePlugin
+            : $this->supportedExtensions[$this->blueprint->extension]];
     }
 
     public function getParsedContentPlugin(): ParserPluginInterface

@@ -6,17 +6,23 @@ use HusamAwadhi\PowerParser\Blueprint\Components\ConditionKeyword;
 
 class Condition
 {
+    public readonly mixed $value;
+
     public function __construct(
-        public readonly array $column,
+        public readonly array $columns,
         public readonly ConditionKeyword $keyword,
-        public readonly string $value,
+        mixed $value,
     ) {
+        $this->value = match ($value) {
+            '{null}' => null,
+            default => $value,
+        };
     }
 
-    public static function from(array $column, ConditionKeyword $keyword, string $value): self
+    public static function from(array $columns, ConditionKeyword $keyword, mixed $value): self
     {
         return new self(
-            column: $column,
+            columns: $columns,
             keyword: $keyword,
             value: $value,
         );

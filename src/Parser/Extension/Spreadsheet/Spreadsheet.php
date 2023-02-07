@@ -3,6 +3,8 @@
 namespace HusamAwadhi\PowerParser\Parser\Extension\Spreadsheet;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
+use HusamAwadhi\PowerParser\Blueprint\ValueObject\Component;
+use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Parser\Extension\BlueprintInterpreter;
 use HusamAwadhi\PowerParser\Parser\Utils\IOCapable;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -21,6 +23,8 @@ class Spreadsheet extends BlueprintInterpreter
     protected Blueprint $blueprint;
 
     protected array $data;
+
+    protected array $filtered;
 
     // reference: https://phpspreadsheet.readthedocs.io/en/latest/topics/file-formats/
     protected array $supportedExtensions = [
@@ -62,10 +66,11 @@ class Spreadsheet extends BlueprintInterpreter
         foreach ($sheets as $sheet) {
             $this->data[] = [
                 'title' => $sheet->getTitle(),
-                'content' => array_filter(
-                    $sheet->toArray(),
-                    fn ($value) => \array_unique($value) !== [null]
-                ),
+                'content' => $sheet->toArray(),
+                // 'content' => array_filter(
+                //     $sheet->toArray(),
+                //     fn ($value) => \array_unique($value) !== [null]
+                // ),
             ];
         }
 
@@ -74,13 +79,41 @@ class Spreadsheet extends BlueprintInterpreter
         return $this;
     }
 
-    public function filterSheet(array $sheet, Blueprint $blueprint): array
+    public function filterSheets(): self
     {
-        return $sheet;
+        if (!isset($this->data)) {
+            throw new InvalidArgumentException('content is not parsed yet.');
+        }
+
+        $this->filtered = [];
+
+        foreach ($this->data as $sheet) {
+            $index = 0;
+            $content = $sheet['content'];
+
+            /** @var Component */
+            foreach ($this->blueprint->components as $component) {
+                for ($index; $index < count($content); ++$index) {
+                    if ($this->isMatch($component, $content[$index])) {
+                        // dump('matched');
+                        $this->filtered[] = $this->getFields($component->fields, $content[$index]);
+
+                        break;
+                    }
+                    // dump('not matched');
+                }
+                // dump("we at {$index}");
+            }
+        }
+
+        return $this;
     }
 
     public function getFiltered(): array
     {
-        return $this->filterSheet($this->data, $this->blueprint);
+        return match (isset($this->filtered)) {
+            true => $this->filtered,
+            false => $this->filterSheets()->filtered,
+        };
     }
 }
