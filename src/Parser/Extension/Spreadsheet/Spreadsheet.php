@@ -3,7 +3,6 @@
 namespace HusamAwadhi\PowerParser\Parser\Extension\Spreadsheet;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
-use HusamAwadhi\PowerParser\Blueprint\BlueprintInterface;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Component;
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Parser\Extension\BlueprintInterpreter;
@@ -54,7 +53,7 @@ class Spreadsheet extends BlueprintInterpreter
     /**
      * @inheritDoc
      */
-    public function parse(string $fileContent, BlueprintInterface $blueprint): self
+    public function parse(string $fileContent, Blueprint $blueprint): self
     {
         $this->blueprint = $blueprint;
         $reader = IOFactory::createReader(ucfirst($blueprint->extension));

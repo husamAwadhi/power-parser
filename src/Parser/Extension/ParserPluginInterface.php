@@ -2,7 +2,7 @@
 
 namespace HusamAwadhi\PowerParser\Parser\Extension;
 
-use HusamAwadhi\PowerParser\Blueprint\BlueprintInterface;
+use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 
 interface ParserPluginInterface
 {
@@ -14,7 +14,7 @@ interface ParserPluginInterface
     /**
      * load file content and perform the data extraction.
      */
-    public function parse(string $fileContent, BlueprintInterface $blueprint): self;
+    public function parse(string $fileContent, Blueprint $blueprint): self;
 
     /**
      * filter loaded content and return as array.
