@@ -3,6 +3,7 @@
 namespace HusamAwadhi\PowerParser\Parser\Extension\Spreadsheet;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
+use HusamAwadhi\PowerParser\Blueprint\BlueprintInterface;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Component;
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Parser\Extension\BlueprintInterpreter;
@@ -53,7 +54,7 @@ class Spreadsheet extends BlueprintInterpreter
     /**
      * @inheritDoc
      */
-    public function parse(string $fileContent, Blueprint $blueprint): self
+    public function parse(string $fileContent, BlueprintInterface $blueprint): self
     {
         $this->blueprint = $blueprint;
         $reader = IOFactory::createReader(ucfirst($blueprint->extension));
@@ -94,15 +95,16 @@ class Spreadsheet extends BlueprintInterpreter
             /** @var Component */
             foreach ($this->blueprint->components as $component) {
                 for ($index; $index < count($content); ++$index) {
-                    if ($this->isMatch($component, $content[$index])) {
-                        // dump('matched');
-                        $this->filtered[] = $this->getFields($component->fields, $content[$index]);
+                    if ($this->isMatch($component, $content[$index], $index)) {
+                        $this->filtered[$component->name] = (
+                            $component->table
+                            ? $this->getTable($component, $content, $index)
+                            : $this->getFields($component, $content[$index])
+                        );
 
                         break;
                     }
-                    // dump('not matched');
                 }
-                // dump("we at {$index}");
             }
         }
 

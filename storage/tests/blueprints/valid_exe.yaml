@@ -4,7 +4,8 @@ meta:
     extension: exe
     name: "sample"
 blueprint:
-  - mandatory: true
+  - name: header_info
+    mandatory: true
     type: hit
     conditions:
       - column: [1]

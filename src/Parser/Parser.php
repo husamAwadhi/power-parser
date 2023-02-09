@@ -6,9 +6,11 @@ use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Exception\UnsupportedExtensionException;
 use HusamAwadhi\PowerParser\Parser\Extension\ParserPluginInterface;
+use JsonSerializable;
+use ReturnTypeWillChange;
 use stdClass;
 
-class Parser implements ParserInterface
+class Parser implements JsonSerializable, ParserInterface
 {
     protected ParserPluginInterface $parsedContentPlugin;
 
@@ -89,7 +91,7 @@ class Parser implements ParserInterface
      */
     public function getAsObject(): stdClass
     {
-        return new stdClass();
+        return json_decode(json_encode($this->getAsArray()));
     }
 
     /**
@@ -100,11 +102,9 @@ class Parser implements ParserInterface
         return $this->getParsedContentPlugin()->getFiltered();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getAsJson(): ?string
+    #[ReturnTypeWillChange]
+    public function jsonSerialize(): array
     {
-        return '';
+        return $this->getAsArray();
     }
 }

@@ -13,7 +13,12 @@ class Condition
         public readonly ConditionKeyword $keyword,
         mixed $value,
     ) {
-        $this->value = match ($value) {
+        $this->value = $this->matchValue($value);
+    }
+
+    private function matchValue(mixed $value): mixed
+    {
+        return match ($value) {
             '{null}' => null,
             default => $value,
         };

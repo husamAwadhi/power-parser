@@ -24,9 +24,4 @@ interface ParserInterface
      * return parsed file as associative array.
      */
     public function getAsArray(): array;
-
-    /**
-     * return parsed file as json string.
-     */
-    public function getAsJson(): ?string;
 }

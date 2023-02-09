@@ -75,11 +75,13 @@ class ComponentsTest extends TestCase
             [
                 [
                     [
+                        'name' => 'its me',
                         'type' => 'hit',
                         'conditions' => [['column' => [2], 'isNot' => 'value']],
                         'fields' => [['name' => 'field1', 'position' => 2]],
                     ],
                     [
+                        'name' => 'its me',
                         'type' => 'next',
                         'fields' => [['name' => 'field1', 'position' => 2]],
                     ],
@@ -108,6 +110,7 @@ class ComponentsTest extends TestCase
             [
                 [
                     [
+                        'name' => 'me',
                         'conditions' => [['column' => [2], 'isNot' => 'value']],
                         'fields' => [['name' => 'field1', 'position' => 2]],
                     ]
@@ -117,6 +120,7 @@ class ComponentsTest extends TestCase
             [
                 [
                     [
+                        'name' => 'me',
                         'type' => 'miss',
                         'conditions' => [['column' => [2], 'isNot' => 'value']],
                         'fields' => [['name' => 'field1', 'position' => 2]],
@@ -127,7 +131,16 @@ class ComponentsTest extends TestCase
             [
                 [
                     [
-                        'type' => 'next'
+                        'type' => 'next',
+                        'name' => 'me',
+                    ]
+                ],
+                InvalidComponentException::class,
+            ],
+            [
+                [
+                    [
+                        'type' => 'next',
                     ]
                 ],
                 InvalidComponentException::class,

@@ -68,8 +68,17 @@ class Components implements ComponentInterface, Iterator
 
             if (!Type::tryFrom($element['type'])) {
                 throw new InvalidComponentException(
-                    \sprintf(self::INVALID_VALUE, "type (#$i)", $element['type'], implode(', ', array_column(Type::cases(), 'value')))
+                    \sprintf(
+                        self::INVALID_VALUE,
+                        "type (#$i)",
+                        $element['type'],
+                        implode(', ', array_column(Type::cases(), 'value'))
+                    )
                 );
+            }
+
+            if (!isset($element['name'])) {
+                throw new InvalidComponentException(\sprintf(self::MISSING_ELEMENT, "blueprint (#$i)", 'name'));
             }
 
             if (!isset($element['fields'])) {

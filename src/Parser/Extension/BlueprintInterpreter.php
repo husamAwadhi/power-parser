@@ -4,11 +4,11 @@ namespace HusamAwadhi\PowerParser\Parser\Extension;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Blueprint\Components\ConditionKeyword;
-use HusamAwadhi\PowerParser\Blueprint\Components\Fields;
 use HusamAwadhi\PowerParser\Blueprint\Type;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Component;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Condition;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Field;
+use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 
 abstract class BlueprintInterpreter implements ParserPluginInterface
 {
@@ -18,12 +18,18 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
 
     protected int $lastHitIndex = -1;
 
-    public function isMatch(Component $component, array $row): bool
+    public function isMatch(Component $component, array $row, $index): bool
     {
-        return match ($component->type) {
+        $found = match ($component->type) {
             Type::HIT => $this->matchHit($component, $row),
-            Type::NEXT => $this->matchNext()
+            Type::NEXT => $this->matchNext($index)
         };
+
+        if ($found) {
+            $this->lastHitIndex = $index;
+        }
+
+        return $found;
     }
 
     protected function matchHit(Component $component, array $row): bool
@@ -31,7 +37,6 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
         $found = false;
         /** @var Condition $condition */
         foreach ($component->conditions as $condition) {
-            // dump('hit', $condition, $row);
             $passedCondition = false;
             foreach ($condition->columns as $column) {
                 if (isset($row[$column - 1])) {
@@ -52,21 +57,34 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
         return $found;
     }
 
-    protected function matchNext(): bool
+    protected function matchNext($index): bool
     {
-        // dump('next');
-
-        return $this->lastHitIndex > -1;
+        return $this->lastHitIndex === $index - 1;
     }
 
-    protected function getFields(Fields $fields, $row): array
+    protected function getFields(Component $component, array $row): array
     {
+        $filteredFields = [];
         /** @var Field $field */
-        foreach ($fields as $field) {
-            // dump('field', $field, $row);
+        foreach ($component->fields as $field) {
+            if (!array_key_exists($field->position - 1, $row)) {
+                throw new InvalidFieldException("field {$field->name} does not exist in position #{$field->position}");
+            }
+            $filteredFields[$field->name] = $row[$field->position - 1];
         }
 
-        return $row;
+        return $filteredFields;
+    }
+
+    protected function getTable(Component $component, array $rows, int &$index): array
+    {
+        $table = [];
+        while ($this->isMatch($component, $rows[$index], $index) && $index < count($rows)) {
+            $table[] = $this->getFields($component, $rows[$index]);
+            ++$index;
+        }
+
+        return $table;
     }
 
     protected function matchCondition(Condition $condition, mixed $data): bool
@@ -77,7 +95,6 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
             ConditionKeyword::IsNot => $condition->value !== $data,
             ConditionKeyword::NoneOf => !in_array($data, explode(',', $condition->value)),
         };
-        // dump('matchCondition', $return);
 
         return  $return;
     }
