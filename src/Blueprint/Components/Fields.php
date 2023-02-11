@@ -52,7 +52,7 @@ class Fields implements ComponentInterface, Iterator
         foreach ($fields as $field) {
             if (
                 !array_key_exists('name', $field) ||
-                strlen($field['name']) == 0 
+                strlen($field['name']) == 0
             ) {
                 throw new InvalidFieldException('missing or invalid name');
             }

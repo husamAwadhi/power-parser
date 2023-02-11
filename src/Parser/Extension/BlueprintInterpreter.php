@@ -39,7 +39,8 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
                 $index = $this->lastHitIndex + 1;
                 for ($index; $index < count($content); ++$index) {
                     if ($this->isMatch($component, $content[$index], $index)) {
-                        $this->filtered[$component->name] = ($component->table
+                        $this->filtered[$component->name] = (
+                            $component->table
                             ? $this->getTable($component, $content, $index)
                             : $this->getFields($component, $content[$index])
                         );
