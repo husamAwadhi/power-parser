@@ -9,3 +9,4 @@ parameters:
     ignoreErrors:
         - message: '#Left side of && is always false.#'
           path: src/Blueprint/Components/Components.php
+          count: 1
