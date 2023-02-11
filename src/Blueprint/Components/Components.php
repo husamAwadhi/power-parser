@@ -2,9 +2,11 @@
 
 namespace HusamAwadhi\PowerParser\Blueprint\Components;
 
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
 use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidComponentException;
 use HusamAwadhi\PowerParser\Blueprint\Type;
+use HusamAwadhi\PowerParser\Blueprint\ValueObject\Component;
+use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 use Iterator;
 use ReturnTypeWillChange;
 
@@ -16,37 +18,37 @@ class Components implements ComponentInterface, Iterator
 
     private $position = 0;
 
-    private readonly array $elements;
+    /** @var Component[] */
+    public readonly array $components;
 
-    protected function __construct(
-        array $elements
+    public function __construct(
+        array $elements,
+        protected BlueprintHelper $helper,
     ) {
         $this->position = 0;
-        $this->elements = $this->buildElements($elements);
+        $this->components = $this->buildElements($elements);
     }
 
     protected function buildElements(array $elements = []): array
     {
         $components = [];
         foreach ($elements as $element) {
-            $components[] = [
-                'type' => Type::from($element['type']),
-                'fields' => Fields::createFromParameters($element['fields']),
-                'mandatory' => (bool) ($element['mandatory'] ?? false),
-                'conditions' => ($element['type'] == Type::NEXT->value
-                    ? []
-                    : Conditions::createFromParameters($element['conditions'])),
-            ];
+            $element['fields'] = $this->helper->createFields($element['fields']);
+            $element['conditions'] = (isset($element['conditions'])
+                ? $this->helper->createConditions($element['conditions'])
+                : null);
+
+            $components[] = Component::from(component: $element);
         }
 
         return $components;
     }
 
-    public static function createFromParameters(array $elements): self
+    public static function from(array $elements, BlueprintHelper $helper): self
     {
         self::validation($elements);
 
-        return new self($elements);
+        return new self($elements, $helper);
     }
 
     /**
@@ -66,12 +68,28 @@ class Components implements ComponentInterface, Iterator
 
             if (!Type::tryFrom($element['type'])) {
                 throw new InvalidComponentException(
-                    \sprintf(self::INVALID_VALUE, "type (#$i)", $element['type'], implode(',', array_column(Type::cases(), 'value')))
+                    \sprintf(
+                        self::INVALID_VALUE,
+                        "type (#$i)",
+                        $element['type'],
+                        implode(', ', array_column(Type::cases(), 'value'))
+                    )
                 );
+            }
+
+            if (!isset($element['name'])) {
+                throw new InvalidComponentException(\sprintf(self::MISSING_ELEMENT, "blueprint (#$i)", 'name'));
             }
 
             if (!isset($element['fields'])) {
                 throw new InvalidComponentException(\sprintf(self::MISSING_ELEMENT, "blueprint (#$i)", 'fields'));
+            }
+
+            if (
+                ($element['table'] ?? false && !isset($element['conditions'])) &&
+                ($element['type'] == Type::HIT->value && !isset($element['conditions']))
+            ) {
+                throw new InvalidComponentException(\sprintf(self::MISSING_ELEMENT, "blueprint (#$i)", 'conditions'));
             }
 
             ++$i;
@@ -96,7 +114,7 @@ class Components implements ComponentInterface, Iterator
     #[ReturnTypeWillChange]
     public function current()
     {
-        return $this->elements[$this->position];
+        return $this->components[$this->position];
     }
 
     #[ReturnTypeWillChange]
@@ -112,6 +130,6 @@ class Components implements ComponentInterface, Iterator
 
     public function valid(): bool
     {
-        return isset($this->elements[$this->position]);
+        return isset($this->components[$this->position]);
     }
 }

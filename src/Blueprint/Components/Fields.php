@@ -2,9 +2,11 @@
 
 namespace HusamAwadhi\PowerParser\Blueprint\Components;
 
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
 use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidFieldException;
+use HusamAwadhi\PowerParser\Blueprint\ValueObject\Field;
 use HusamAwadhi\PowerParser\Dictionary;
+use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use Iterator;
 use ReturnTypeWillChange;
 
@@ -14,18 +16,32 @@ class Fields implements ComponentInterface, Iterator
 
     private int $position = 0;
 
+    public readonly array $fields;
+
     public function __construct(
-        public readonly array $fields,
+        /** @var Field[] */
+        array $fields,
+        protected BlueprintHelper $helper,
     ) {
+        $this->fields = $this->buildFields($fields);
         $this->position = 0;
-        // $this->dict = new Dictionary();
     }
 
-    public static function createFromParameters(array $fields): self
+    protected function buildFields(array $fields): array
+    {
+        $objectFields = [];
+        foreach ($fields as $field) {
+            $objectFields[] = Field::from($field['name'], $field['position']);
+        }
+
+        return $objectFields;
+    }
+
+    public static function from(array $fields, BlueprintHelper $helper): self
     {
         self::validation($fields);
 
-        return new self($fields);
+        return new self($fields, $helper);
     }
 
     /**
@@ -35,9 +51,8 @@ class Fields implements ComponentInterface, Iterator
     {
         foreach ($fields as $field) {
             if (
-                !isset($field['name']) ||
-                empty($field['name']) ||
-                !is_string($field['name'])
+                !array_key_exists('name', $field) ||
+                strlen($field['name']) == 0
             ) {
                 throw new InvalidFieldException('missing or invalid name');
             }

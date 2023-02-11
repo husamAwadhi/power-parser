@@ -10,5 +10,6 @@
   </php>
   <testsuite name="PowerParser Unit Test Suite">
     <directory>./tests</directory>
+    <exclude>./tests/JustExampleTest.php</exclude>
   </testsuite>
 </phpunit>

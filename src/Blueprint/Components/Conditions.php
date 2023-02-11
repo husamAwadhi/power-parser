@@ -2,9 +2,11 @@
 
 namespace HusamAwadhi\PowerParser\Blueprint\Components;
 
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
 use HusamAwadhi\PowerParser\Blueprint\ComponentInterface;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidComponentException;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidFieldException;
+use HusamAwadhi\PowerParser\Blueprint\ValueObject\Condition;
+use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
+use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use Iterator;
 use ReturnTypeWillChange;
 
@@ -12,10 +14,36 @@ class Conditions implements ComponentInterface, Iterator
 {
     private int $position = 0;
 
+    public readonly array $conditions;
+
     public function __construct(
-        public readonly array $conditions
+        /** @var Condition[] */
+        array $conditions,
+        protected BlueprintHelper $helper
     ) {
+        $this->conditions = $this->buildConditions($conditions);
         $this->position = 0;
+    }
+
+    protected function buildConditions($conditions): array
+    {
+        $objectConditions = [];
+        foreach ($conditions as $condition) {
+            if (!isset($condition['keyword']) || !$condition['keyword'] instanceof ConditionKeyword) {
+                $case = self::getConditionKeyword($condition);
+                $value = $condition[$case->value];
+            } else {
+                $case = $condition['keyword'];
+                $value = $condition['value'];
+            }
+            $objectConditions[] = Condition::from(
+                columns: $condition['column'],
+                keyword: $case,
+                value: $value,
+            );
+        }
+
+        return $objectConditions;
     }
 
     /**
@@ -23,11 +51,11 @@ class Conditions implements ComponentInterface, Iterator
      *
      * @throws InvalidComponentException
      */
-    public static function createFromParameters(array $conditions): self
+    public static function from(array $conditions, BlueprintHelper $helper): self
     {
         self::validation($conditions);
 
-        return new self($conditions);
+        return new self($conditions, $helper);
     }
 
     /**
@@ -45,31 +73,33 @@ class Conditions implements ComponentInterface, Iterator
                 throw new InvalidFieldException('missing or empty column');
             }
 
-            $conditionKeyword = [];
-            foreach (ConditionKeyword::cases() as $case) {
-                if (
-                    isset($condition[$case->value]) &&
-                    !empty($condition[$case->value]) &&
-                    is_string($condition[$case->value])
-                ) {
-                    $conditionKeyword = [
-                        $case->value,
-                        $condition[$case->value],
-                    ];
+            $case = self::getConditionKeyword($condition);
 
-                    break;
-                }
-            }
-
-            if (count($conditionKeyword) == 0) {
+            if ($case === false) {
                 throw new InvalidFieldException('no valid condition found');
             }
             $finalConditions[] = [
                 'column' => $condition['column'],
-                $conditionKeyword[0] => $conditionKeyword[1],
+                'keyword' => $case,
+                'value' => $condition[$case->value],
             ];
         }
         $conditions = $finalConditions;
+    }
+
+    protected static function getConditionKeyword(array $condition): ConditionKeyword | bool
+    {
+        foreach (ConditionKeyword::cases() as $case) {
+            if (
+                isset($condition[$case->value]) &&
+                !empty($condition[$case->value]) &&
+                is_string($condition[$case->value])
+            ) {
+                return $case;
+            }
+        }
+
+        return false;
     }
 
     public static function getMandatoryElements(): array
@@ -106,6 +136,6 @@ class Conditions implements ComponentInterface, Iterator
 
     public function valid(): bool
     {
-        return isset($this->fields[$this->position]);
+        return isset($this->conditions[$this->position]);
     }
 }

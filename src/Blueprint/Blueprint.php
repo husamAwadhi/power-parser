@@ -3,13 +3,13 @@
 namespace HusamAwadhi\PowerParser\Blueprint;
 
 use HusamAwadhi\PowerParser\Blueprint\Components\Components;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidBlueprintException;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidComponentException;
+use HusamAwadhi\PowerParser\Exception\InvalidBlueprintException;
+use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 
 class Blueprint implements BlueprintInterface
 {
-    private function __construct(
-        public readonly string $rawFile,
+    public function __construct(
+        public readonly string $path,
         public readonly string $name,
         public readonly string $version,
         public readonly string $extension,
@@ -21,23 +21,20 @@ class Blueprint implements BlueprintInterface
      * Blueprint entrypoint.
      *
      * @param string $stream File path or content
-     * @param bool $isPath true if passed stream is a path to file
      *
      * @throws InvalidBlueprintException
      * @throws InvalidComponentException
      */
-    public static function createBlueprint(string $stream, bool $isPath = false): self | null
+    public static function from(array $content, string $stream, BlueprintHelper $helper): self
     {
-        $parsedFile = self::parseYaml($stream, $isPath);
-
-        self::validate($parsedFile);
+        self::validate($content);
 
         return new self(
             $stream,
-            $parsedFile['meta']['file']['name'],
-            $parsedFile['version'],
-            $parsedFile['meta']['file']['extension'],
-            Components::createFromParameters($parsedFile['blueprint']),
+            $content['meta']['file']['name'],
+            $content['version'],
+            $content['meta']['file']['extension'],
+            $helper->createComponents($content['blueprint']),
         );
     }
 
@@ -77,20 +74,5 @@ class Blueprint implements BlueprintInterface
         if (!isset($yaml['blueprint'])) {
             throw new InvalidBlueprintException(\sprintf(self::MISSING_SECTION, 'blueprint'));
         }
-    }
-
-    /**
-     * @throws InvalidBlueprintException
-     */
-    private static function parseYaml(string $input, bool $isPath): mixed
-    {
-        if (!$input || ($isPath && !is_file($input))) {
-            throw new InvalidBlueprintException(self::EMPTY_STREAM);
-        }
-
-        return match ($isPath) {
-            true => \yaml_parse_file($input),
-            false => \yaml_parse($input),
-        };
     }
 }

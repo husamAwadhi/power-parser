@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace HusamAwadhi\PowerParserTests\Blueprint\Components;
 
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
+use HusamAwadhi\PowerParser\Blueprint\Components\ConditionKeyword;
 use HusamAwadhi\PowerParser\Blueprint\Components\Conditions;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidFieldException;
+use HusamAwadhi\PowerParser\Blueprint\ValueObject\Condition;
+use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use PHPUnit\Framework\TestCase;
 
 class ConditionsTest extends TestCase
@@ -15,7 +18,7 @@ class ConditionsTest extends TestCase
      */
     public function testCreateFromParameters($parametersArray, $expected)
     {
-        $conditions = Conditions::createFromParameters($parametersArray);
+        $conditions = Conditions::from($parametersArray, new BlueprintHelper());
 
         $this->assertIsIterable($conditions);
         $this->assertEquals($conditions->conditions, $expected);
@@ -29,8 +32,8 @@ class ConditionsTest extends TestCase
                     ['column' => [2], 'isNot' => 'value'],
                 ],
                 [
-                    ['column' => [2], 'is' => 'value'],
-                    ['column' => [2], 'isNot' => 'value'],
+                    Condition::from([2], ConditionKeyword::Is, 'value'),
+                    Condition::from([2], ConditionKeyword::IsNot, 'value'),
                 ],
             ],
             [
@@ -39,8 +42,8 @@ class ConditionsTest extends TestCase
                     ['column' => [2,5,6,7], 'noneOf' => 'value'],
                 ],
                 [
-                    ['column' => [2,2], 'anyOf' => 'value'],
-                    ['column' => [2,5,6,7], 'noneOf' => 'value'],
+                    Condition::from([2,2], ConditionKeyword::AnyOf, 'value'),
+                    Condition::from([2,5,6,7], ConditionKeyword::NoneOf, 'value'),
                 ],
             ],
         ];
@@ -52,7 +55,7 @@ class ConditionsTest extends TestCase
     public function testCreateFromInvalidParameters($parametersArray, $exception)
     {
         $this->expectException($exception);
-        $_ = Conditions::createFromParameters($parametersArray);
+        $_ = Conditions::from($parametersArray, new BlueprintHelper());
     }
     public function invalidParametersDataProvider()
     {

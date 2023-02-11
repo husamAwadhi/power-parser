@@ -2,6 +2,7 @@
 /tests/codeCoverage
 /analysis
 /phpunit.xml
+~$*
 
 ## IDE support
 *.buildpath

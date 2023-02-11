@@ -17,7 +17,7 @@ interface ComponentInterface
     /**
      * Entrypoint function.
      */
-    public static function createFromParameters(array $elements): self;
+    public static function from(array $elements, BlueprintHelper $helper): self;
 
     /**
      * Validate passed parameters before instantiating self.

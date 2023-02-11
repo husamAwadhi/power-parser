@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace HusamAwadhi\PowerParserTests\Blueprint\Components;
 
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
 use HusamAwadhi\PowerParser\Blueprint\Components\Fields;
-use HusamAwadhi\PowerParser\Blueprint\Exceptions\InvalidFieldException;
+use HusamAwadhi\PowerParser\Blueprint\ValueObject\Field;
+use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use PHPUnit\Framework\TestCase;
 
 class FieldsTest extends TestCase
@@ -15,7 +17,7 @@ class FieldsTest extends TestCase
      */
     public function testCreateFromParameters($parametersArray, $expected)
     {
-        $fields = Fields::createFromParameters($parametersArray);
+        $fields = Fields::from($parametersArray, new BlueprintHelper());
 
         $this->assertIsIterable($fields);
         $this->assertEquals($fields->fields, $expected);
@@ -29,8 +31,8 @@ class FieldsTest extends TestCase
                     ['name' => 'field2', 'position' => 3],
                 ],
                 [
-                    ['name' => 'field1', 'position' => 2],
-                    ['name' => 'field2', 'position' => 3],
+                    Field::from('field1', 2),
+                    Field::from('field2', 3),
                 ],
             ],
         ];
@@ -42,7 +44,7 @@ class FieldsTest extends TestCase
     public function testCreateFromInvalidParameters($parametersArray, $exception)
     {
         $this->expectException($exception);
-        $_ = Fields::createFromParameters($parametersArray);
+        $_ = Fields::from($parametersArray, new BlueprintHelper());
     }
     public function invalidParametersDataProvider()
     {
