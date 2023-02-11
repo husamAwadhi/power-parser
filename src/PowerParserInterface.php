@@ -1,9 +1,10 @@
 <?php
 
-namespace HusamAwadhi\PowerParser\Parser;
+namespace HusamAwadhi\PowerParser;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Blueprint\BlueprintBuilder;
+use HusamAwadhi\PowerParser\Parser\ParserBuilder;
 
 interface PowerParserInterface
 {

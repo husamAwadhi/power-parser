@@ -7,7 +7,6 @@ namespace HusamAwadhi\PowerParserTests\Parser;
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Blueprint\BlueprintBuilder;
 use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
-use HusamAwadhi\PowerParser\Blueprint\BlueprintInterface;
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Exception\UnsupportedExtensionException;
 use HusamAwadhi\PowerParser\Parser\Extension\ParserPluginInterface;
@@ -19,9 +18,10 @@ class ParserTest extends TestCase
 {
     protected string $blueprintsDirectory = STORAGE_DIRECTORY . '/blueprints/';
     protected string $excelFile = STORAGE_DIRECTORY . '/sample.xlsx';
+    protected string $csvFile = STORAGE_DIRECTORY . '/sample.csv';
     protected Blueprint $blueprint;
-    protected ParserPluginInterface $dummyPlugin;
-    protected ParserPluginInterface $dummyPlugin2;
+    protected $dummyPlugin;
+    protected $dummyPlugin2;
 
     public function setUp(): void
     {
@@ -29,40 +29,13 @@ class ParserTest extends TestCase
         $builder->load($this->blueprintsDirectory . 'valid.yaml');
         $this->blueprint = $builder->build();
 
-        $this->dummyPlugin = new class implements ParserPluginInterface
-        {
-            public function getSupportedExtensions(): array
-            {
-                return ['exe'];
-            }
+        $this->dummyPlugin = $this->createStub(Spreadsheet::class);
+        $this->dummyPlugin->method('getSupportedExtensions')
+            ->willReturn(['exe']);
 
-            public function parse(string $s, BlueprintInterface $b): self
-            {
-                return $this;
-            }
-
-            public function getFiltered(): array
-            {
-                return [];
-            }
-        };
-        $this->dummyPlugin2 = new class implements ParserPluginInterface
-        {
-            public function getSupportedExtensions(): array
-            {
-                return ['exe'];
-            }
-
-            public function parse(string $s, BlueprintInterface $b): self
-            {
-                return $this;
-            }
-
-            public function getFiltered(): array
-            {
-                return [];
-            }
-        };
+        $this->dummyPlugin2 = $this->createStub(Spreadsheet::class);
+        $this->dummyPlugin2->method('getSupportedExtensions')
+            ->willReturn(['exe']);
     }
 
     public function testParserCreatedSuccessfully()
@@ -84,7 +57,7 @@ class ParserTest extends TestCase
             \file_get_contents($this->excelFile),
             [
                 Spreadsheet::class => new Spreadsheet(),
-                $this->dummyPlugin::class => new $this->dummyPlugin()
+                $this->dummyPlugin::class => $this->dummyPlugin
             ]
         );
 
@@ -107,8 +80,8 @@ class ParserTest extends TestCase
             $blueprint,
             \file_get_contents($this->excelFile),
             [
-                $this->dummyPlugin::class => new $this->dummyPlugin(),
-                $this->dummyPlugin2::class => new $this->dummyPlugin2(),
+                $this->dummyPlugin::class => $this->dummyPlugin,
+                $this->dummyPlugin2::class => $this->dummyPlugin2,
             ]
         );
 
@@ -125,8 +98,8 @@ class ParserTest extends TestCase
             $blueprint,
             \file_get_contents($this->excelFile),
             [
-                $this->dummyPlugin::class => new $this->dummyPlugin(),
-                $this->dummyPlugin2::class => new $this->dummyPlugin2(),
+                $this->dummyPlugin::class => $this->dummyPlugin,
+                $this->dummyPlugin2::class => $this->dummyPlugin2,
             ]
         );
 
@@ -143,7 +116,7 @@ class ParserTest extends TestCase
             \file_get_contents($this->excelFile),
             [
                 Spreadsheet::class => new Spreadsheet(),
-                $this->dummyPlugin::class => new $this->dummyPlugin()
+                $this->dummyPlugin::class => $this->dummyPlugin
             ]
         );
 
@@ -160,7 +133,7 @@ class ParserTest extends TestCase
         $parser = new Parser(
             $this->blueprint,
             \file_get_contents($this->excelFile),
-            [$this->dummyPlugin::class => new $this->dummyPlugin()]
+            [$this->dummyPlugin::class => $this->dummyPlugin]
         );
 
         $_ = $parser->getRecommendedPluginName();
@@ -189,13 +162,142 @@ class ParserTest extends TestCase
             [Spreadsheet::class => new Spreadsheet()]
         );
 
-        $this->assertInstanceOf(ParserPluginInterface::class, $parser->getParsedContentPlugin());
+        $parser->getParsedContentPlugin();
     }
 
     /**
-     * @dataProvider parsedContentDataProvider
+     * @dataProvider parsedCSVContentDataProvider
      */
-    public function testGettingParsedContentAsObject($expectedArray)
+    public function testGettingParsedCSVContentAsJson($expectedArray)
+    {
+        $builder = new BlueprintBuilder(new BlueprintHelper());
+        $builder->load($this->blueprintsDirectory . 'valid_csv.yaml');
+        $blueprint = $builder->build();
+
+        $parser = new Parser(
+            $blueprint,
+            \file_get_contents($this->csvFile),
+            [Spreadsheet::class => new Spreadsheet()]
+        );
+
+        $parser->parse();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode($expectedArray),
+            json_encode($parser)
+        );
+    }
+    public function parsedCSVContentDataProvider(): array
+    {
+        return [[[
+            "header" => [
+                "number",
+                "first_name",
+                "last_name",
+                "email",
+                "profession",
+                "age",
+                "date"
+            ],
+            "info" => [
+                [
+                    12000,
+                    "Grier",
+                    "Arvo",
+                    "Grier.Arvo@email.com",
+                    "developer",
+                    31,
+                    "2022-12-17"
+                ],
+                [
+                    12001,
+                    "Tierney",
+                    "Tremayne",
+                    "Tierney.Tremayne@email.com",
+                    "worker",
+                    51,
+                    "2022-08-28"
+                ],
+                [
+                    12002,
+                    "Rori",
+                    "Virgin",
+                    "Rori.Virgin@email.com",
+                    "police officer",
+                    18,
+                    "2022-07-11"
+                ],
+                [
+                    12003,
+                    "Doralynne",
+                    "Tiffa",
+                    "Doralynne.Tiffa@email.com",
+                    "doctor",
+                    50,
+                    "2023-01-25"
+                ],
+                [
+                    12004,
+                    "Ardenia",
+                    "O'Rourke",
+                    "Ardenia.O'Rourke@email.com",
+                    "doctor",
+                    36,
+                    "2022-09-07"
+                ],
+                [
+                    12005,
+                    "Dale",
+                    "Francyne",
+                    "Dale.Francyne@email.com",
+                    "firefighter",
+                    54,
+                    "2022-02-12"
+                ],
+                [
+                    12006,
+                    "Kittie",
+                    "Yorick",
+                    "Kittie.Yorick@email.com",
+                    "doctor",
+                    58,
+                    "2022-03-27"
+                ],
+                [
+                    12007,
+                    "Layla",
+                    "Krystle",
+                    "Layla.Krystle@email.com",
+                    "doctor",
+                    45,
+                    "2022-09-27"
+                ],
+                [
+                    12008,
+                    "Rosene",
+                    "Donell",
+                    "Rosene.Donell@email.com",
+                    "doctor",
+                    40,
+                    "2022-12-24"
+                ],
+                [
+                    12009,
+                    "Jessamyn",
+                    "McCutcheon",
+                    "Jessamyn.McCutcheon@email.com",
+                    "developer",
+                    21,
+                    "2022-11-23"
+                ]
+            ]
+        ]]];
+    }
+
+    /**
+     * @dataProvider parsedExcelContentDataProvider
+     */
+    public function testGettingParsedExcelContentAsObject($expectedArray)
     {
         $parser = new Parser(
             $this->blueprint,
@@ -212,9 +314,9 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @dataProvider parsedContentDataProvider
+     * @dataProvider parsedExcelContentDataProvider
      */
-    public function testGettingParsedContentAsArray($expectedArray)
+    public function testGettingParsedExcelContentAsArray($expectedArray)
     {
         $parser = new Parser(
             $this->blueprint,
@@ -227,9 +329,9 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @dataProvider parsedContentDataProvider
+     * @dataProvider parsedExcelContentDataProvider
      */
-    public function testGettingParsedContentAsJson($expectedArray)
+    public function testGettingParsedExcelContentAsJson($expectedArray)
     {
         $parser = new Parser(
             $this->blueprint,
@@ -245,7 +347,7 @@ class ParserTest extends TestCase
         );
     }
 
-    public function parsedContentDataProvider(): array
+    public function parsedExcelContentDataProvider(): array
     {
         return [
             [[
@@ -472,5 +574,22 @@ class ParserTest extends TestCase
                 "total" => ["total_credit" => 28936.211, "total_debit" => 26584.63]
             ]]
         ];
+    }
+
+    public function testThrowsExceptionOnMissingMandatoryComponent()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $builder = new BlueprintBuilder(new BlueprintHelper());
+        $builder->load($this->blueprintsDirectory . 'missing_mandatory_csv.yaml');
+        $blueprint = $builder->build();
+
+        $parser = new Parser(
+            $blueprint,
+            \file_get_contents($this->csvFile),
+            [Spreadsheet::class => new Spreadsheet()]
+        );
+
+        $parser->parse()->getAsArray();
     }
 }

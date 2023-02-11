@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace HusamAwadhi\PowerParserTests\Parser;
+namespace HusamAwadhi\PowerParserTests;
 
-use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Blueprint\BlueprintBuilder;
 use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
+use HusamAwadhi\PowerParser\Blueprint\BlueprintInterface;
 use HusamAwadhi\PowerParser\Parser\ParserBuilder;
-use HusamAwadhi\PowerParser\Parser\PowerParser;
+use HusamAwadhi\PowerParser\PowerParser;
 use PHPUnit\Framework\TestCase;
 
 class PowerParserTest extends TestCase
@@ -37,6 +37,6 @@ class PowerParserTest extends TestCase
             true
         );
 
-        $this->assertInstanceOf(Blueprint::class, $blueprint);
+        $this->assertInstanceOf(BlueprintInterface::class, $blueprint);
     }
 }

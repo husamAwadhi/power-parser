@@ -20,7 +20,7 @@ trait IOCapable
      */
     protected function writeTemporaryFile(string $content): string
     {
-        $this->path = tempnam(sys_get_temp_dir(), __CLASS__);
+        $this->path = tempnam(sys_get_temp_dir(), __FUNCTION__);
         $this->file = fopen($this->path, 'r+b');
 
         if (!is_resource($this->file)) {

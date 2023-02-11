@@ -9,7 +9,7 @@ blueprint:
     type: hit
     conditions:
       - column: [1]
-        is: "رقم الصندوق"
+        is: "Cashier Number"
     fields:
       - name: currency
         position: 6

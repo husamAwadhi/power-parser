@@ -8,6 +8,7 @@ use HusamAwadhi\PowerParser\Blueprint\Type;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Component;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Condition;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Field;
+use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 
 abstract class BlueprintInterpreter implements ParserPluginInterface
@@ -18,12 +19,52 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
 
     protected int $lastHitIndex = -1;
 
-    public function isMatch(Component $component, array $row, $index): bool
+    protected array $data;
+
+    protected array $filtered;
+
+    protected function filter(): self
     {
-        $found = match ($component->type) {
-            Type::HIT => $this->matchHit($component, $row),
-            Type::NEXT => $this->matchNext($index)
-        };
+        if (!isset($this->data)) {
+            throw new InvalidArgumentException('content is not parsed yet.');
+        }
+
+        $this->filtered = [];
+        foreach ($this->data as $page) {
+            $content = $page['content'];
+
+            /** @var Component */
+            foreach ($this->blueprint->components as $component) {
+                $found = false;
+                $index = $this->lastHitIndex + 1;
+                for ($index; $index < count($content); ++$index) {
+                    if ($this->isMatch($component, $content[$index], $index)) {
+                        $this->filtered[$component->name] = ($component->table
+                            ? $this->getTable($component, $content, $index)
+                            : $this->getFields($component, $content[$index])
+                        );
+                        $found = true;
+
+                        break;
+                    }
+                }
+
+                if (!$found && $component->mandatory) {
+                    throw new InvalidArgumentException(
+                        "File {$this->blueprint->name} does not contain mandatory field: {$component->name}"
+                    );
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    public function isMatch(Component $component, array $row, int $index, bool $isTable = false): bool
+    {
+        $found = ($component->type === Type::NEXT && !$isTable
+            ? $this->matchNext($index)
+            : $this->matchHit($component, $row));
 
         if ($found) {
             $this->lastHitIndex = $index;
@@ -79,7 +120,7 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
     protected function getTable(Component $component, array $rows, int &$index): array
     {
         $table = [];
-        while ($this->isMatch($component, $rows[$index], $index) && $index < count($rows)) {
+        while ($index < count($rows) && $this->isMatch($component, $rows[$index], $index, true)) {
             $table[] = $this->getFields($component, $rows[$index]);
             ++$index;
         }
@@ -97,5 +138,13 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
         };
 
         return  $return;
+    }
+
+    public function getFiltered(): array
+    {
+        return match (isset($this->filtered)) {
+            true => $this->filtered,
+            false => $this->filter()->filtered,
+        };
     }
 }

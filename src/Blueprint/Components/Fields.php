@@ -51,9 +51,8 @@ class Fields implements ComponentInterface, Iterator
     {
         foreach ($fields as $field) {
             if (
-                !isset($field['name']) ||
-                empty($field['name']) ||
-                !is_string($field['name'])
+                !array_key_exists('name', $field) ||
+                strlen($field['name']) == 0 
             ) {
                 throw new InvalidFieldException('missing or invalid name');
             }

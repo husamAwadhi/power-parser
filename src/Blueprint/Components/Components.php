@@ -34,9 +34,9 @@ class Components implements ComponentInterface, Iterator
         $components = [];
         foreach ($elements as $element) {
             $element['fields'] = $this->helper->createFields($element['fields']);
-            $element['conditions'] = ($element['type'] == Type::NEXT->value
-                ? null
-                : $this->helper->createConditions($element['conditions']));
+            $element['conditions'] = (isset($element['conditions'])
+                ? $this->helper->createConditions($element['conditions'])
+                : null);
 
             $components[] = Component::from(component: $element);
         }
@@ -83,6 +83,13 @@ class Components implements ComponentInterface, Iterator
 
             if (!isset($element['fields'])) {
                 throw new InvalidComponentException(\sprintf(self::MISSING_ELEMENT, "blueprint (#$i)", 'fields'));
+            }
+
+            if (
+                ($element['table'] ?? false && !isset($element['conditions'])) &&
+                ($element['type'] == Type::HIT->value && !isset($element['conditions']))
+            ) {
+                throw new InvalidComponentException(\sprintf(self::MISSING_ELEMENT, "blueprint (#$i)", 'conditions'));
             }
 
             ++$i;

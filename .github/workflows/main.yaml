@@ -1,5 +1,5 @@
 name: main
-on: [ pull_request ]
+on: [ push, pull_request ]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -116,34 +116,3 @@ jobs:
 
       - name: Static analysis with PHPStan
         run: ./vendor/bin/phpstan analyse -l 5
-
-  coverage:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.1
-          extensions: ctype, dom, gd, iconv, fileinfo, libxml, mbstring, simplexml, xml, xmlreader, xmlwriter, zip, zlib, yaml
-          coverage: pcov
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
-
-      - name: Coverage
-        run: |
-          ./vendor/bin/phpunit --coverage-clover coverage-clover.xml
