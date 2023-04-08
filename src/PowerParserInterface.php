@@ -4,17 +4,25 @@ namespace HusamAwadhi\PowerParser;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Blueprint\BlueprintBuilder;
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
 use HusamAwadhi\PowerParser\Parser\ParserBuilder;
 
 interface PowerParserInterface
 {
     /**
-     * get PowerParser parser builder.
+     * get PowerParser parser builder. it adds default extension
+     * and load blueprint in the process.
      */
-    public function getParserBuilder(int $maxFileLength = 15_000): ParserBuilder;
+    public static function getParserBuilder(
+        string $stream,
+        string $file,
+        int $maxFileLength = 15_000,
+        ?BlueprintBuilder $blueprintBuilder = null,
+        ?BlueprintHelper $blueprintHelper = null,
+    ): ParserBuilder;
 
     /**
      * create PowerParser blueprint object.
      */
-    public function createBlueprint(string $stream, BlueprintBuilder $builder, bool $isPath = false): Blueprint;
+    public static function createBlueprint(string $stream, BlueprintBuilder $builder): Blueprint;
 }
