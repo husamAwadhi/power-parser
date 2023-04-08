@@ -24,7 +24,10 @@ class PowerParserTest extends TestCase
 
     public function testSuccessfullyCreateParserBuilder()
     {
-        $builder = $this->powerParser->getParserBuilder();
+        $builder = $this->powerParser->getParserBuilder(
+            $this->blueprintsDirectory . 'valid.yaml',
+            $this->excelFile
+        );
 
         $this->assertInstanceOf(ParserBuilder::class, $builder);
     }
@@ -33,8 +36,7 @@ class PowerParserTest extends TestCase
     {
         $blueprint = $this->powerParser->createBlueprint(
             $this->blueprintsDirectory . 'valid.yaml',
-            new BlueprintBuilder(new BlueprintHelper()),
-            true
+            new BlueprintBuilder(new BlueprintHelper())
         );
 
         $this->assertInstanceOf(BlueprintInterface::class, $blueprint);

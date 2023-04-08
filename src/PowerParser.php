@@ -4,6 +4,8 @@ namespace HusamAwadhi\PowerParser;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Blueprint\BlueprintBuilder;
+use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
+use HusamAwadhi\PowerParser\Parser\Extension\Spreadsheet\Spreadsheet;
 use HusamAwadhi\PowerParser\Parser\ParserBuilder;
 
 class PowerParser implements PowerParserInterface
@@ -11,17 +13,32 @@ class PowerParser implements PowerParserInterface
     /**
      * @inheritDoc
      */
-    public function getParserBuilder(int $maxFileLength = 15_000): ParserBuilder
-    {
-        return new ParserBuilder(maxFileLength: 15_000);
+    public static function getParserBuilder(
+        string $stream,
+        string $file,
+        int $maxFileLength = 15_000,
+        ?BlueprintBuilder $blueprintBuilder = null,
+        ?BlueprintHelper $blueprintHelper = null,
+    ): ParserBuilder {
+        return (new ParserBuilder(maxFileLength: $maxFileLength))
+            ->registerExtension(ext: new Spreadsheet())
+            ->addBlueprint(
+                blueprint: self::createBlueprint(
+                    stream: $stream,
+                    builder: ($blueprintBuilder ?? new BlueprintBuilder(
+                        $blueprintHelper ?? new BlueprintHelper()
+                    ))
+                )
+            )
+            ->addFile(path: $file);
     }
 
     /**
      * @inheritDoc
      */
-    public function createBlueprint(string $stream, BlueprintBuilder $builder, bool $isPath = false): Blueprint
+    public static function createBlueprint(string $stream, BlueprintBuilder $builder): Blueprint
     {
-        if ($isPath) {
+        if (is_file($stream) && is_readable($stream)) {
             $builder->load($stream);
         } else {
             $builder->parse($stream);
