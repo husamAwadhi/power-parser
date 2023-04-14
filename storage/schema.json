@@ -102,6 +102,12 @@
                 },
                 "position": {
                     "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
                 }
             },
             "required": [
