@@ -544,7 +544,7 @@ class ParserTest extends TestCase
                         "description" => "Return for Invoice No. 3599",
                         "reference_number" => null,
                         "credit" => null,
-                        "debit" =>"992.0015",
+                        "debit" => "992.0015",
                     ], [
                         "date" => "21/09/2022",
                         "type" => "Return",
@@ -591,5 +591,257 @@ class ParserTest extends TestCase
         );
 
         $parser->parse()->getAsArray();
+    }
+
+    /**
+     * @dataProvider parsedExcelContentWithProcessorsDataProvider
+     */
+    public function testGettingParsedExcelContentAsJsonWithProcessors($expectedArray)
+    {
+        $builder = new BlueprintBuilder(new BlueprintHelper());
+        $builder->load($this->blueprintsDirectory . 'valid_with_processors.yaml');
+        $blueprint = $builder->build();
+
+        $parser = new Parser(
+            $blueprint,
+            \file_get_contents($this->excelFile),
+            [Spreadsheet::class => new Spreadsheet()]
+        );
+
+        $parser->parse();
+
+        $this->assertJsonStringEqualsJsonString(
+            json_encode($expectedArray),
+            json_encode($parser)
+        );
+    }
+
+    public function parsedExcelContentWithProcessorsDataProvider(): array
+    {
+        return [
+            [[
+                "header_info" => ["currency" => "SR", "cashier" => 1],
+                "balance_info" => ["opening_balance" => 9152.25],
+                "transaction_table" => [
+                    [
+                        "date" => "21/09/2022",
+                        "type" => "Journal Entry", "document_number" => 30,
+                        "description" => "Cash purchase invoices",
+                        "reference_number" => 0,
+                        "credit" => 23380.63,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Payment Voucher",
+                        "document_number" => 331,
+                        "description" => null,
+                        "reference_number" => 0,
+                        "credit" => 0,
+                        "debit" => 580,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Payment Voucher",
+                        "document_number" => 332,
+                        "description" => null,
+                        "reference_number" => 0,
+                        "credit" => 0,
+                        "debit" => 980,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Payment Voucher",
+                        "document_number" => 333,
+                        "description" => null,
+                        "reference_number" => 0,
+                        "credit" => 0,
+                        "debit" => 170,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3627,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 640,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3628,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 45.01,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3629,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 460,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3630,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 28.01,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3631,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 227.00,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3632,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 28.01,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3633,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 280.00,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3634,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 105,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3635,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 220,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3636,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 140,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3637,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 708.01,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3638,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 1360.01,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3639,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 152.08,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3640,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 90.02,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3641,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 460,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3642,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 180.09,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Invoice",
+                        "document_number" => 3643,
+                        "description" => "Sales",
+                        "reference_number" => 0,
+                        "credit" => 432.33,
+                        "debit" => 0,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Return",
+                        "document_number" => 248,
+                        "description" => "Return for Invoice No. 3625",
+                        "reference_number" => 0,
+                        "credit" => 0,
+                        "debit" => 270,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Return",
+                        "document_number" => 249,
+                        "description" => "Return",
+                        "reference_number" => 0,
+                        "credit" => 0,
+                        "debit" => 100.00,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Return",
+                        "document_number" => 250,
+                        "description" => "Return for Invoice No. 3599",
+                        "reference_number" => 0,
+                        "credit" => 0,
+                        "debit" => 992,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Return",
+                        "document_number" => 251,
+                        "description" => "Return for Invoice No. 3631",
+                        "reference_number" => 0,
+                        "credit" => 0,
+                        "debit" => 112,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Purchase",
+                        "document_number" => 127,
+                        "description" => null,
+                        "reference_number" => 0,
+                        "credit" => 0,
+                        "debit" => 1030.63,
+                    ], [
+                        "date" => "21/09/2022",
+                        "type" => "Purchase",
+                        "document_number" => 128,
+                        "description" => null,
+                        "reference_number" => 0,
+                        "credit" => 0,
+                        "debit" => 22350,
+                    ]
+                ],
+                "total" => ["total_credit" => 28936.21, "total_debit" => 26584.63]
+            ]]
+        ];
     }
 }
