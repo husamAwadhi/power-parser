@@ -4,6 +4,8 @@ namespace HusamAwadhi\PowerParser\Parser\Extension;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Blueprint\Components\ConditionKeyword;
+use HusamAwadhi\PowerParser\Blueprint\FieldFormat;
+use HusamAwadhi\PowerParser\Blueprint\FieldType;
 use HusamAwadhi\PowerParser\Blueprint\Type;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Component;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Condition;
@@ -112,7 +114,8 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
             if (!array_key_exists($field->position - 1, $row)) {
                 throw new InvalidFieldException("field {$field->name} does not exist in position #{$field->position}");
             }
-            $filteredFields[$field->name] = $row[$field->position - 1];
+            $fieldValue = $row[$field->position - 1];
+            $filteredFields[$field->name] = $this->postProcessField($fieldValue, $field);
         }
 
         return $filteredFields;
@@ -131,14 +134,31 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
 
     protected function matchCondition(Condition $condition, mixed $data): bool
     {
-        $return = match ($condition->keyword) {
+        return match ($condition->keyword) {
             ConditionKeyword::AnyOf => in_array($data, explode(',', $condition->value)),
             ConditionKeyword::Is => $condition->value === $data,
             ConditionKeyword::IsNot => $condition->value !== $data,
             ConditionKeyword::NoneOf => !in_array($data, explode(',', $condition->value)),
         };
+    }
 
-        return  $return;
+    protected function postProcessField(mixed $value, Field $field): mixed
+    {
+        if (null !== $field->type) {
+            $value = match ($field->type) {
+                FieldType::BOOL => strtolower((string) $value) == 'true' || $value == true || $value == '1',
+                FieldType::BOOL_STRICT => $value == true,
+                FieldType::INT => (int) $value,
+                FieldType::FLOAT => (float) $value,
+            };
+        } elseif (null !== $field->format) {
+            $value = match ($field->format->type) {
+                FieldFormat::STRING => substr($value, 0, $field->format->argument),
+                FieldFormat::FLOAT => round((float) $value, $field->format->argument, PHP_ROUND_HALF_UP),
+            };
+        }
+
+        return $value;
     }
 
     public function getFiltered(): array

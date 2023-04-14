@@ -1,5 +1,5 @@
 {
     "yaml.schemas": {
-        "storage/schema.json": "file:///c%3A/html/power-parser/storage/tests/blueprints/*.yaml"
+        "storage/schema.json": "storage/tests/blueprints/*.yaml"
     }
 }
