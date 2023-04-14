@@ -41,7 +41,8 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
                 $index = $this->lastHitIndex + 1;
                 for ($index; $index < count($content); ++$index) {
                     if ($this->isMatch($component, $content[$index], $index)) {
-                        $this->filtered[$component->name] = ($component->table
+                        $this->filtered[$component->name] = (
+                            $component->table
                             ? $this->getTable($component, $content, $index)
                             : $this->getFields($component, $content[$index])
                         );
@@ -143,21 +144,20 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
 
     protected function postProcessField(mixed $value, Field $field): mixed
     {
-        if (!is_null($field->type)) {
+        if (null !== $field->type) {
             $value = match ($field->type) {
                 FieldType::BOOL => strtolower((string) $value) == 'true' || $value == true || $value == '1',
                 FieldType::BOOL_STRICT => $value == true,
                 FieldType::INT => (int) $value,
                 FieldType::FLOAT => (float) $value,
-                default => throw new InvalidFieldException("Invalid field type.")
             };
-        } elseif (!is_null($field->format)) {
+        } elseif (null !== $field->format) {
             $value = match ($field->format->type) {
                 FieldFormat::STRING => substr($value, 0, $field->format->argument),
                 FieldFormat::FLOAT => round((float) $value, $field->format->argument, PHP_ROUND_HALF_UP),
-                default => throw new InvalidFieldException("Invalid field format.")
             };
         }
+
         return $value;
     }
 

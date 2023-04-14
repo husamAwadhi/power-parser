@@ -86,7 +86,7 @@ class Fields implements ComponentInterface, Iterator
                 if (!FieldType::tryFrom($field['type'])) {
                     throw new InvalidFieldException(
                         \sprintf(
-                            "Blueprint %s field has invalid value (%s). Acceptable value(s) [%s]",
+                            'Blueprint %s field has invalid value (%s). Acceptable value(s) [%s]',
                             "type (#$i)",
                             $field['type'],
                             implode(', ', array_column(FieldType::cases(), 'value'))
@@ -107,7 +107,7 @@ class Fields implements ComponentInterface, Iterator
                 ) {
                     throw new InvalidFieldException(
                         \sprintf(
-                            "Blueprint format field has invalid value (%s). Acceptable value(s) {%s}%%{digits}",
+                            'Blueprint format field has invalid value (%s). Acceptable value(s) {%s}%%{digits}',
                             $field['format'],
                             implode(',', array_column(FieldFormat::cases(), 'value'))
                         )
