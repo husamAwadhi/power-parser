@@ -109,4 +109,4 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Static analysis with PHPStan
-        run: ./vendor/bin/phpstan analyse -l 5
+        run: ./vendor/bin/phpstan analyse --ansi
