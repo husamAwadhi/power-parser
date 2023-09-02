@@ -11,6 +11,7 @@ trait IOCapable
 
     private string $path = '';
 
+    /** @var resource */
     private $file;
 
     /**
@@ -20,12 +21,21 @@ trait IOCapable
      */
     protected function writeTemporaryFile(string $content): string
     {
-        $this->path = tempnam(sys_get_temp_dir(), __FUNCTION__);
-        $this->file = fopen($this->path, 'r+b');
+        $path = tempnam(sys_get_temp_dir(), __FUNCTION__);
 
-        if (!is_resource($this->file)) {
+        if (!$path) {
+            throw new UnableToCreateFileException('Unable to get a temporary file path');
+        }
+
+        $this->path = $path;
+
+        $file = fopen($this->path, 'r+b');
+
+        if (!is_resource($file)) {
             throw new UnableToCreateFileException("Unable to create temporary file in {$this->path}");
         }
+
+        $this->file = $file;
 
         if (!is_writable($this->path)) {
             throw new UnableToCreateFileException("Unable to modify temporary file in {$this->path}");
@@ -41,10 +51,10 @@ trait IOCapable
         return $this->path ? unlink($this->path) : true;
     }
 
-    private function loadFromLink($url): string
+    private function loadFromLink(string $url): string
     {
         // TODO: use curl ... maybe
-        $content = \file_get_contents($url, length: $this->maxFileLength);
+        $content = \file_get_contents($url, length: $this->maxFileLength ?? null);
 
         if ($content === false) {
             throw new InvalidArgumentException("unable to load file from link: {$url}");
@@ -53,13 +63,19 @@ trait IOCapable
         return $content;
     }
 
-    private function loadFromPath($path): string
+    private function loadFromPath(string $path): string
     {
         if (!is_readable($path)) {
-            throw new InvalidArgumentException("unable to read file from link: {$path}");
+            throw new InvalidArgumentException("unable to read file from path: {$path}");
         }
 
-        return \file_get_contents($path, length: $this->maxFileLength);
+        $content = \file_get_contents($path, length: $this->maxFileLength ?? null);
+
+        if ($content === false) {
+            throw new InvalidArgumentException("unable to load file from path: {$path}");
+        }
+
+        return $content;
     }
 
     /**
@@ -67,7 +83,7 @@ trait IOCapable
      *
      * @return string the read data or false on failure
      */
-    protected function load(string $parameter, int $length): string
+    protected function load(string $parameter): string
     {
         if (filter_var($parameter, \FILTER_VALIDATE_URL)) {
             return $this->loadFromLink($parameter);

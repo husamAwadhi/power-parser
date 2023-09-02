@@ -91,7 +91,9 @@ class Parser implements JsonSerializable, ParserInterface
      */
     public function getAsObject(): stdClass
     {
-        return json_decode(json_encode($this->getAsArray()));
+        $json = json_encode($this->getAsArray());
+
+        return $json === false ? new stdClass() : json_decode($json);
     }
 
     /**

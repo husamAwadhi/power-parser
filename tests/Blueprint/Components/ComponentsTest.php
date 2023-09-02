@@ -16,7 +16,7 @@ class ComponentsTest extends TestCase
 {
     protected string $blueprintsDirectory = STORAGE_DIRECTORY . '/blueprints/';
 
-    protected $helper;
+    protected mixed $helper;
 
     public function setUp(): void
     {
@@ -25,8 +25,9 @@ class ComponentsTest extends TestCase
 
     /**
      * @dataProvider invalidFilesProvider
+     * @param class-string<\Throwable> $exception
      */
-    public function testThrowingExceptionOnInvalidBlueprint(string $fileName, string $exception)
+    public function testThrowingExceptionOnInvalidBlueprint(string $fileName, string $exception): void
     {
         $this->expectException($exception);
         $path = $this->blueprintsDirectory . $fileName . '.yaml';
@@ -35,7 +36,7 @@ class ComponentsTest extends TestCase
         $_ = $builder->load($path)
             ->build();
     }
-    public function invalidFilesProvider()
+    public function invalidFilesProvider(): array
     {
         return [
             ['invalid_component_1', InvalidComponentException::class],
@@ -45,7 +46,7 @@ class ComponentsTest extends TestCase
     /**
      * @dataProvider validParametersDataProvider
      */
-    public function testCreateFromParameters($parametersArray)
+    public function testCreateFromParameters(array $parametersArray): void
     {
         $components = Components::from($parametersArray, new BlueprintHelper());
 
@@ -69,7 +70,7 @@ class ComponentsTest extends TestCase
             $components->components,
         );
     }
-    public function validParametersDataProvider()
+    public function validParametersDataProvider(): array
     {
         return [
             [
@@ -92,13 +93,14 @@ class ComponentsTest extends TestCase
 
     /**
      * @dataProvider invalidParametersDataProvider
+     * @param class-string<\Throwable> $exception
      */
-    public function testCreateFromInvalidParameters($parametersArray, $exception)
+    public function testCreateFromInvalidParameters(array $parametersArray, string $exception): void
     {
         $this->expectException($exception);
         $_ = Components::from($parametersArray, $this->helper);
     }
-    public function invalidParametersDataProvider()
+    public function invalidParametersDataProvider(): array
     {
         return [
             [

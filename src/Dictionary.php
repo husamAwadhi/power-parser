@@ -7,14 +7,14 @@ final class Dictionary
     private const FILE = 'en';
     private const DICTIONARY_DIRECTORY = '/storage/dictionary/';
 
-    private readonly string $filePath;
+    private readonly ?string $filePath;
 
     public function __construct(?string $filePath = null)
     {
         $this->filePath = $this->generateFilePath($filePath);
     }
 
-    private function generateFilePath(?string $filePath = null)
+    private function generateFilePath(?string $filePath = null): ?string
     {
         return is_file($filePath ?? '')
             ? $filePath

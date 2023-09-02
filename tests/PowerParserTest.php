@@ -22,7 +22,7 @@ class PowerParserTest extends TestCase
         $this->powerParser =  new PowerParser();
     }
 
-    public function testSuccessfullyCreateParserBuilder()
+    public function testSuccessfullyCreateParserBuilder(): void
     {
         $builder = $this->powerParser->getParserBuilder(
             $this->blueprintsDirectory . 'valid.yaml',
@@ -32,7 +32,7 @@ class PowerParserTest extends TestCase
         $this->assertInstanceOf(ParserBuilder::class, $builder);
     }
 
-    public function testSuccessfullyCreateBlueprint()
+    public function testSuccessfullyCreateBlueprint(): void
     {
         $blueprint = $this->powerParser->createBlueprint(
             $this->blueprintsDirectory . 'valid.yaml',

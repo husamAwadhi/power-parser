@@ -80,7 +80,7 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
     {
         $found = false;
         /** @var Condition $condition */
-        foreach ($component->conditions as $condition) {
+        foreach ($component->conditions ?? [] as $condition) {
             $passedCondition = false;
             foreach ($condition->columns as $column) {
                 if (isset($row[$column - 1])) {
@@ -101,7 +101,7 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
         return $found;
     }
 
-    protected function matchNext($index): bool
+    protected function matchNext(int $index): bool
     {
         return $this->lastHitIndex === $index - 1;
     }

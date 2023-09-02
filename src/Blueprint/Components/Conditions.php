@@ -25,7 +25,7 @@ class Conditions implements ComponentInterface, Iterator
         $this->position = 0;
     }
 
-    protected function buildConditions($conditions): array
+    protected function buildConditions(array $conditions): array
     {
         $objectConditions = [];
         foreach ($conditions as $condition) {
@@ -75,9 +75,6 @@ class Conditions implements ComponentInterface, Iterator
 
             $case = self::getConditionKeyword($condition);
 
-            if ($case === false) {
-                throw new InvalidFieldException('no valid condition found');
-            }
             $finalConditions[] = [
                 'column' => $condition['column'],
                 'keyword' => $case,
@@ -87,7 +84,7 @@ class Conditions implements ComponentInterface, Iterator
         $conditions = $finalConditions;
     }
 
-    protected static function getConditionKeyword(array $condition): ConditionKeyword | bool
+    protected static function getConditionKeyword(array $condition): ConditionKeyword
     {
         foreach (ConditionKeyword::cases() as $case) {
             if (
@@ -99,7 +96,7 @@ class Conditions implements ComponentInterface, Iterator
             }
         }
 
-        return false;
+        throw new InvalidFieldException('no valid condition keyword found');
     }
 
     public static function getMandatoryElements(): array

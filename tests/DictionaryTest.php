@@ -11,7 +11,7 @@ class DictionaryTest extends TestCase
 {
     private string $storageTestDirectory = STORAGE_DIRECTORY . '/dictionaries/';
 
-    public function testCreateObject()
+    public function testCreateObject(): void
     {
         $this->assertInstanceOf(
             Dictionary::class,
@@ -22,7 +22,7 @@ class DictionaryTest extends TestCase
     /**
      * @dataProvider getDataProvider
      */
-    public function testCanGetValue($key, $default, $file, $actual)
+    public function testCanGetValue(string $key, ?string $default, string $file, string $actual): void
     {
         $dictionary = new Dictionary($this->storageTestDirectory . $file);
 
@@ -31,7 +31,7 @@ class DictionaryTest extends TestCase
             $actual,
         );
     }
-    public function getDataProvider()
+    public function getDataProvider(): array
     {
         return [
             ['test.my.limits', null, 'valid.php', 'you %s'],
@@ -42,7 +42,7 @@ class DictionaryTest extends TestCase
     /**
      * @dataProvider formattedValuesDataProvider
      */
-    public function testCanFormattedGetValue($key, $default, $file, $actual, $values)
+    public function testCanFormattedGetValue(string $key, ?string $default, string $file, string $actual, array $values): void
     {
         $dictionary = new Dictionary($this->storageTestDirectory . $file);
 
@@ -51,7 +51,7 @@ class DictionaryTest extends TestCase
             $actual,
         );
     }
-    public function formattedValuesDataProvider()
+    public function formattedValuesDataProvider(): array
     {
         return [
             ['test.my.limits', null, 'valid.php', 'you fool', ['fool']],

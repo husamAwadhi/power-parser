@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace HusamAwadhi\PowerParserTests\Parser;
 
-use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Blueprint\BlueprintBuilder;
 use HusamAwadhi\PowerParser\Blueprint\BlueprintHelper;
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
@@ -20,7 +19,7 @@ class ParserBuilderTest extends TestCase
     protected string $blueprintsDirectory = STORAGE_DIRECTORY . '/blueprints/';
     protected string $excelFile = STORAGE_DIRECTORY . '/sample.xlsx';
 
-    public function testParserCreatedSuccessfully()
+    public function testParserCreatedSuccessfully(): void
     {
         $builder = new ParserBuilder();
         $blueprintBuilder = new BlueprintBuilder(new BlueprintHelper());
@@ -35,7 +34,7 @@ class ParserBuilderTest extends TestCase
         $this->assertInstanceOf(Parser::class, $parser);
     }
 
-    public function testExceptionWhenNoBlueprint()
+    public function testExceptionWhenNoBlueprint(): void
     {
         $this->expectException(MissingElementException::class);
 
@@ -46,7 +45,7 @@ class ParserBuilderTest extends TestCase
             ->build();
     }
 
-    public function testExceptionWhenNoFile()
+    public function testExceptionWhenNoFile(): void
     {
         $this->expectException(MissingElementException::class);
 
@@ -60,7 +59,7 @@ class ParserBuilderTest extends TestCase
             ->build();
     }
 
-    public function testExceptionWhenFileNotFound()
+    public function testExceptionWhenFileNotFound(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -71,7 +70,7 @@ class ParserBuilderTest extends TestCase
             ->build();
     }
 
-    public function testExceptionWhenRegisteringDuplicateExtension()
+    public function testExceptionWhenRegisteringDuplicateExtension(): void
     {
         $this->expectException(InvalidPLuginException::class);
 
