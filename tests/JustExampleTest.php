@@ -11,11 +11,11 @@ class JustExampleTest extends TestCase
     /**
      * @dataProvider exampleOneDataProvider
      */
-    public function testExampleOne($expected, $actual)
+    public function testExampleOne(int $expected, int $actual): void
     {
         $this->assertEquals($expected, $actual);
     }
-    public function exampleOneDataProvider()
+    public function exampleOneDataProvider(): array
     {
         return [
             [1, 1],
@@ -23,7 +23,7 @@ class JustExampleTest extends TestCase
         ];
     }
 
-    public function testExampleTwo()
+    public function testExampleTwo(): void
     {
         $this->assertEquals(1, 1);
     }

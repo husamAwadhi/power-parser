@@ -43,7 +43,7 @@ class ParserBuilder
 
     public function addFile(string $path): self
     {
-        $this->fileContent = $this->load($path, length: $this->maxFileLength);
+        $this->fileContent = $this->load($path);
 
         return $this;
     }

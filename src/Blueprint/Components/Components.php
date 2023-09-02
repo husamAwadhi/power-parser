@@ -16,7 +16,7 @@ class Components implements ComponentInterface, Iterator
     private const MISSING_ELEMENT = 'Blueprint section %s is missing a mandatory element %s';
     private const INVALID_VALUE = 'Blueprint %s element has invalid value (%s). Acceptable value(s) [%s]';
 
-    private $position = 0;
+    private int $position = 0;
 
     /** @var Component[] */
     public readonly array $components;

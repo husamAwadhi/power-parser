@@ -15,9 +15,9 @@ class BlueprintBuilderTest extends TestCase
     protected string $blueprintsDirectory = STORAGE_DIRECTORY . '/blueprints/';
 
 
-    public function testCreateFromString()
+    public function testCreateFromString(): void
     {
-        $rawFile = file_get_contents($this->blueprintsDirectory .  'valid.yaml');
+        $rawFile = (string) file_get_contents($this->blueprintsDirectory .  'valid.yaml');
 
         $builder = new BlueprintBuilder(new BlueprintHelper());
         $builder->parse($rawFile);
@@ -26,7 +26,7 @@ class BlueprintBuilderTest extends TestCase
         $this->assertInstanceOf(BlueprintInterface::class, $blueprint);
     }
 
-    public function testCreateFromPath()
+    public function testCreateFromPath(): void
     {
         $path = $this->blueprintsDirectory .  'valid.yaml';
 
@@ -40,7 +40,7 @@ class BlueprintBuilderTest extends TestCase
     /**
      * @dataProvider emptyStreamsProvider
      */
-    public function testThrowingExceptionOnEmptyStream(string $stream, bool $isPath)
+    public function testThrowingExceptionOnEmptyStream(string $stream, bool $isPath): void
     {
         $this->expectException(InvalidBlueprintException::class);
         $builder = new BlueprintBuilder(new BlueprintHelper());
@@ -51,7 +51,7 @@ class BlueprintBuilderTest extends TestCase
         }
         $_ = $builder->build();
     }
-    public function emptyStreamsProvider()
+    public function emptyStreamsProvider(): array
     {
         return [
             ['', false],

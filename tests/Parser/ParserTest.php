@@ -20,8 +20,8 @@ class ParserTest extends TestCase
     protected string $excelFile = STORAGE_DIRECTORY . '/sample.xlsx';
     protected string $csvFile = STORAGE_DIRECTORY . '/sample.csv';
     protected Blueprint $blueprint;
-    protected $dummyPlugin;
-    protected $dummyPlugin2;
+    protected mixed $dummyPlugin;
+    protected mixed $dummyPlugin2;
 
     public function setUp(): void
     {
@@ -38,23 +38,23 @@ class ParserTest extends TestCase
             ->willReturn(['exe']);
     }
 
-    public function testParserCreatedSuccessfully()
+    public function testParserCreatedSuccessfully(): void
     {
         $parser = new Parser(
             $this->blueprint,
-            \file_get_contents($this->excelFile),
+            (string) \file_get_contents($this->excelFile),
             [Spreadsheet::class => new Spreadsheet()]
         );
 
         $this->assertInstanceOf(Parser::class, $parser);
     }
 
-    public function testListOfSupportedExtensions()
+    public function testListOfSupportedExtensions(): void
     {
 
         $parser = new Parser(
             $this->blueprint,
-            \file_get_contents($this->excelFile),
+            (string) \file_get_contents($this->excelFile),
             [
                 Spreadsheet::class => new Spreadsheet(),
                 $this->dummyPlugin::class => $this->dummyPlugin
@@ -70,7 +70,7 @@ class ParserTest extends TestCase
         );
     }
 
-    public function testSuccessfullyGetRecommendedPlugin()
+    public function testSuccessfullyGetRecommendedPlugin(): void
     {
         $builder = new BlueprintBuilder(new BlueprintHelper());
         $builder->load($this->blueprintsDirectory . 'valid_exe.yaml');
@@ -78,7 +78,7 @@ class ParserTest extends TestCase
 
         $parser = new Parser(
             $blueprint,
-            \file_get_contents($this->excelFile),
+            (string) \file_get_contents($this->excelFile),
             [
                 $this->dummyPlugin::class => $this->dummyPlugin,
                 $this->dummyPlugin2::class => $this->dummyPlugin2,
@@ -88,7 +88,7 @@ class ParserTest extends TestCase
         $this->assertEquals($this->dummyPlugin::class, $parser->getRecommendedPluginName());
     }
 
-    public function testSuccessfullyOverrideRecommendedPlugin()
+    public function testSuccessfullyOverrideRecommendedPlugin(): void
     {
         $builder = new BlueprintBuilder(new BlueprintHelper());
         $builder->load($this->blueprintsDirectory . 'valid_exe.yaml');
@@ -96,7 +96,7 @@ class ParserTest extends TestCase
 
         $parser = new Parser(
             $blueprint,
-            \file_get_contents($this->excelFile),
+            (string) \file_get_contents($this->excelFile),
             [
                 $this->dummyPlugin::class => $this->dummyPlugin,
                 $this->dummyPlugin2::class => $this->dummyPlugin2,
@@ -109,15 +109,17 @@ class ParserTest extends TestCase
         );
     }
 
-    public function testSuccessfullyIgnoreOverridingIfExtensionDoesNotSupport()
+    public function testSuccessfullyIgnoreOverridingIfExtensionDoesNotSupport(): void
     {
+        /** @var ParserPluginInterface[] */
+        $plugins =             [
+            Spreadsheet::class => new Spreadsheet(),
+            $this->dummyPlugin::class => $this->dummyPlugin
+        ];
         $parser = new Parser(
             $this->blueprint,
-            \file_get_contents($this->excelFile),
-            [
-                Spreadsheet::class => new Spreadsheet(),
-                $this->dummyPlugin::class => $this->dummyPlugin
-            ]
+            (string) \file_get_contents($this->excelFile),
+            $plugins
         );
 
         $this->assertEquals(
@@ -126,24 +128,24 @@ class ParserTest extends TestCase
         );
     }
 
-    public function testThrowsExceptionOnUnsupportedExtension()
+    public function testThrowsExceptionOnUnsupportedExtension(): void
     {
         $this->expectException(UnsupportedExtensionException::class);
 
         $parser = new Parser(
             $this->blueprint,
-            \file_get_contents($this->excelFile),
+            (string) \file_get_contents($this->excelFile),
             [$this->dummyPlugin::class => $this->dummyPlugin]
         );
 
         $_ = $parser->getRecommendedPluginName();
     }
 
-    public function testParseContent()
+    public function testParseContent(): void
     {
         $parser = new Parser(
             $this->blueprint,
-            \file_get_contents($this->excelFile),
+            (string) \file_get_contents($this->excelFile),
             [Spreadsheet::class => new Spreadsheet()]
         );
 
@@ -152,13 +154,13 @@ class ParserTest extends TestCase
         $this->assertInstanceOf(ParserPluginInterface::class, $parser->getParsedContentPlugin());
     }
 
-    public function testThrowsExceptionIfContentNotParsedYet()
+    public function testThrowsExceptionIfContentNotParsedYet(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         $parser = new Parser(
             $this->blueprint,
-            \file_get_contents($this->excelFile),
+            (string) \file_get_contents($this->excelFile),
             [Spreadsheet::class => new Spreadsheet()]
         );
 
@@ -168,7 +170,7 @@ class ParserTest extends TestCase
     /**
      * @dataProvider parsedCSVContentDataProvider
      */
-    public function testGettingParsedCSVContentAsJson($expectedArray)
+    public function testGettingParsedCSVContentAsJson(array $expectedArray): void
     {
         $builder = new BlueprintBuilder(new BlueprintHelper());
         $builder->load($this->blueprintsDirectory . 'valid_csv.yaml');
@@ -176,15 +178,15 @@ class ParserTest extends TestCase
 
         $parser = new Parser(
             $blueprint,
-            \file_get_contents($this->csvFile),
+            (string) \file_get_contents($this->csvFile),
             [Spreadsheet::class => new Spreadsheet()]
         );
 
         $parser->parse();
 
         $this->assertJsonStringEqualsJsonString(
-            json_encode($expectedArray),
-            json_encode($parser)
+            (string) json_encode($expectedArray),
+            (string) json_encode($parser)
         );
     }
     public function parsedCSVContentDataProvider(): array
@@ -297,18 +299,18 @@ class ParserTest extends TestCase
     /**
      * @dataProvider parsedExcelContentDataProvider
      */
-    public function testGettingParsedExcelContentAsObject($expectedArray)
+    public function testGettingParsedExcelContentAsObject(array $expectedArray): void
     {
         $parser = new Parser(
             $this->blueprint,
-            \file_get_contents($this->excelFile),
+            (string) \file_get_contents($this->excelFile),
             [Spreadsheet::class => new Spreadsheet()]
         );
 
         $parser->parse();
 
         $this->assertEquals(
-            json_decode(json_encode($expectedArray)),
+            json_decode((string) json_encode($expectedArray)),
             $parser->getAsObject()
         );
     }
@@ -316,11 +318,11 @@ class ParserTest extends TestCase
     /**
      * @dataProvider parsedExcelContentDataProvider
      */
-    public function testGettingParsedExcelContentAsArray($expectedArray)
+    public function testGettingParsedExcelContentAsArray(array $expectedArray): void
     {
         $parser = new Parser(
             $this->blueprint,
-            \file_get_contents($this->excelFile),
+            (string) \file_get_contents($this->excelFile),
             [Spreadsheet::class => new Spreadsheet()]
         );
         $parser->parse();
@@ -331,19 +333,19 @@ class ParserTest extends TestCase
     /**
      * @dataProvider parsedExcelContentDataProvider
      */
-    public function testGettingParsedExcelContentAsJson($expectedArray)
+    public function testGettingParsedExcelContentAsJson(array $expectedArray): void
     {
         $parser = new Parser(
             $this->blueprint,
-            \file_get_contents($this->excelFile),
+            (string) \file_get_contents($this->excelFile),
             [Spreadsheet::class => new Spreadsheet()]
         );
 
         $parser->parse();
 
         $this->assertJsonStringEqualsJsonString(
-            json_encode($expectedArray),
-            json_encode($parser)
+            (string) json_encode($expectedArray),
+            (string) json_encode($parser)
         );
     }
 
@@ -576,7 +578,7 @@ class ParserTest extends TestCase
         ];
     }
 
-    public function testThrowsExceptionOnMissingMandatoryComponent()
+    public function testThrowsExceptionOnMissingMandatoryComponent(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -586,7 +588,7 @@ class ParserTest extends TestCase
 
         $parser = new Parser(
             $blueprint,
-            \file_get_contents($this->csvFile),
+            (string) \file_get_contents($this->csvFile),
             [Spreadsheet::class => new Spreadsheet()]
         );
 
@@ -596,7 +598,7 @@ class ParserTest extends TestCase
     /**
      * @dataProvider parsedExcelContentWithProcessorsDataProvider
      */
-    public function testGettingParsedExcelContentAsJsonWithProcessors($expectedArray)
+    public function testGettingParsedExcelContentAsJsonWithProcessors(array $expectedArray): void
     {
         $builder = new BlueprintBuilder(new BlueprintHelper());
         $builder->load($this->blueprintsDirectory . 'valid_with_processors.yaml');
@@ -604,15 +606,15 @@ class ParserTest extends TestCase
 
         $parser = new Parser(
             $blueprint,
-            \file_get_contents($this->excelFile),
+            (string) \file_get_contents($this->excelFile),
             [Spreadsheet::class => new Spreadsheet()]
         );
 
         $parser->parse();
 
         $this->assertJsonStringEqualsJsonString(
-            json_encode($expectedArray),
-            json_encode($parser)
+            (string) json_encode($expectedArray),
+            (string) json_encode($parser)
         );
     }
 

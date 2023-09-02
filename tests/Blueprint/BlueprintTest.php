@@ -15,9 +15,9 @@ class BlueprintTest extends TestCase
 {
     protected string $blueprintsDirectory = STORAGE_DIRECTORY . '/blueprints/';
 
-    public function testSuccessfullyCreateBlueprint()
+    public function testSuccessfullyCreateBlueprint(): void
     {
-        $rawFile = file_get_contents($this->blueprintsDirectory .  'valid.yaml');
+        $rawFile = (string) file_get_contents($this->blueprintsDirectory .  'valid.yaml');
         $blueprint = Blueprint::from(
             \yaml_parse($rawFile),
             $this->blueprintsDirectory .  'valid.yaml',
@@ -29,14 +29,15 @@ class BlueprintTest extends TestCase
 
     /**
      * @dataProvider invalidFilesProvider
+     * @param class-string<\Throwable> $exception
      */
-    public function testThrowingExceptionOnInvalidBlueprint(string $fileName, string $exception)
+    public function testThrowingExceptionOnInvalidBlueprint(string $fileName, string $exception): void
     {
         $this->expectException($exception);
         $path = $this->blueprintsDirectory . $fileName . '.yaml';
         Blueprint::from(\yaml_parse_file($path), 'some-path', new BlueprintHelper());
     }
-    public function invalidFilesProvider()
+    public function invalidFilesProvider(): array
     {
         return [
             ['invalid_blueprint_1', InvalidBlueprintException::class],

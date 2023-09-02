@@ -16,14 +16,14 @@ class ConditionsTest extends TestCase
     /**
      * @dataProvider validParametersDataProvider
      */
-    public function testCreateFromParameters($parametersArray, $expected)
+    public function testCreateFromParameters(array $parametersArray, array $expected): void
     {
         $conditions = Conditions::from($parametersArray, new BlueprintHelper());
 
         $this->assertIsIterable($conditions);
         $this->assertEquals($conditions->conditions, $expected);
     }
-    public function validParametersDataProvider()
+    public function validParametersDataProvider(): array
     {
         return [
             [
@@ -51,13 +51,14 @@ class ConditionsTest extends TestCase
 
     /**
      * @dataProvider invalidParametersDataProvider
+     * @param class-string<\Throwable> $exception
      */
-    public function testCreateFromInvalidParameters($parametersArray, $exception)
+    public function testCreateFromInvalidParameters(array $parametersArray, string $exception): void
     {
         $this->expectException($exception);
         $_ = Conditions::from($parametersArray, new BlueprintHelper());
     }
-    public function invalidParametersDataProvider()
+    public function invalidParametersDataProvider(): array
     {
         return [
             [

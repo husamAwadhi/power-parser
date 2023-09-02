@@ -13,12 +13,11 @@ class HelperTest extends TestCase
     /**
      * @dataProvider arraysDataProvider
      */
-    public function testCanProcessArray(array $raw, array $actual, string $separator)
+    public function testCanProcessArray(array $raw, array $actual, string $separator): void
     {
-
         $this->assertEquals(Helper::toOneDimensionArray(array: $raw, separator: $separator), $actual);
     }
-    public function arraysDataProvider()
+    public function arraysDataProvider(): array
     {
         return [
             [
@@ -39,11 +38,11 @@ class HelperTest extends TestCase
         ];
     }
 
-    public function testCanDetectDuplicateKeys()
+    public function testCanDetectDuplicateKeys(): void
     {
         $array = ['i' => ['hate.you' => false, 'hate' => ['you' => true]]];
 
         $this->expectException(Exception::class);
-        $a = Helper::toOneDimensionArray($array, separator: '.');
+        $_ = Helper::toOneDimensionArray($array, separator: '.');
     }
 }
