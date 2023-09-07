@@ -17,7 +17,7 @@ class HelperTest extends TestCase
     {
         $this->assertEquals(Helper::toOneDimensionArray(array: $raw, separator: $separator), $actual);
     }
-    public function arraysDataProvider(): array
+    public static function arraysDataProvider(): array
     {
         return [
             [

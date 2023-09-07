@@ -37,7 +37,7 @@ class BlueprintTest extends TestCase
         $path = $this->blueprintsDirectory . $fileName . '.yaml';
         Blueprint::from(\yaml_parse_file($path), 'some-path', new BlueprintHelper());
     }
-    public function invalidFilesProvider(): array
+    public static function invalidFilesProvider(): array
     {
         return [
             ['invalid_blueprint_1', InvalidBlueprintException::class],
