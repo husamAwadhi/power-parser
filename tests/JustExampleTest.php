@@ -15,7 +15,7 @@ class JustExampleTest extends TestCase
     {
         $this->assertEquals($expected, $actual);
     }
-    public function exampleOneDataProvider(): array
+    public static function exampleOneDataProvider(): array
     {
         return [
             [1, 1],

@@ -36,7 +36,7 @@ class ComponentsTest extends TestCase
         $_ = $builder->load($path)
             ->build();
     }
-    public function invalidFilesProvider(): array
+    public static function invalidFilesProvider(): array
     {
         return [
             ['invalid_component_1', InvalidComponentException::class],
@@ -70,7 +70,7 @@ class ComponentsTest extends TestCase
             $components->components,
         );
     }
-    public function validParametersDataProvider(): array
+    public static function validParametersDataProvider(): array
     {
         return [
             [
@@ -100,7 +100,7 @@ class ComponentsTest extends TestCase
         $this->expectException($exception);
         $_ = Components::from($parametersArray, $this->helper);
     }
-    public function invalidParametersDataProvider(): array
+    public static function invalidParametersDataProvider(): array
     {
         return [
             [

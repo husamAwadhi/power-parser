@@ -189,7 +189,7 @@ class ParserTest extends TestCase
             (string) json_encode($parser)
         );
     }
-    public function parsedCSVContentDataProvider(): array
+    public static function parsedCSVContentDataProvider(): array
     {
         return [[[
             "header" => [
@@ -349,7 +349,7 @@ class ParserTest extends TestCase
         );
     }
 
-    public function parsedExcelContentDataProvider(): array
+    public static function parsedExcelContentDataProvider(): array
     {
         return [
             [[
@@ -618,7 +618,7 @@ class ParserTest extends TestCase
         );
     }
 
-    public function parsedExcelContentWithProcessorsDataProvider(): array
+    public static function parsedExcelContentWithProcessorsDataProvider(): array
     {
         return [
             [[

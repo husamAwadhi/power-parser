@@ -25,7 +25,7 @@ class FieldsTest extends TestCase
         $this->assertIsIterable($fields);
         $this->assertEquals($fields->fields, $expected);
     }
-    public function validParametersDataProvider(): array
+    public static function validParametersDataProvider(): array
     {
         return [
             [
@@ -58,7 +58,7 @@ class FieldsTest extends TestCase
         $this->expectException($exception);
         $_ = Fields::from($parametersArray, new BlueprintHelper());
     }
-    public function invalidParametersDataProvider(): array
+    public static function invalidParametersDataProvider(): array
     {
         return [
             [

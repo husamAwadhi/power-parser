@@ -51,7 +51,7 @@ class BlueprintBuilderTest extends TestCase
         }
         $_ = $builder->build();
     }
-    public function emptyStreamsProvider(): array
+    public static function emptyStreamsProvider(): array
     {
         return [
             ['', false],

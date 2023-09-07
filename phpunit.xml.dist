@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" bootstrap="./tests/bootstrap.php" backupGlobals="true" colors="true" cacheResultFile="/tmp/.PowerParser.phpunit.result.cache">
-  <coverage>
-    <include>
-      <directory suffix=".php">./src</directory>
-    </include>
-  </coverage>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd" bootstrap="./tests/bootstrap.php" backupGlobals="true" colors="true" cacheResultFile="/tmp/.PowerParser.phpunit.result.cache">
+  <coverage/>
   <php>
     <ini name="memory_limit" value="2048M"/>
   </php>
@@ -12,4 +8,9 @@
     <directory>./tests</directory>
     <exclude>./tests/JustExampleTest.php</exclude>
   </testsuite>
+  <source>
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </source>
 </phpunit>

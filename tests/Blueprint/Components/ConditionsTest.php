@@ -23,7 +23,7 @@ class ConditionsTest extends TestCase
         $this->assertIsIterable($conditions);
         $this->assertEquals($conditions->conditions, $expected);
     }
-    public function validParametersDataProvider(): array
+    public static function validParametersDataProvider(): array
     {
         return [
             [
@@ -58,7 +58,7 @@ class ConditionsTest extends TestCase
         $this->expectException($exception);
         $_ = Conditions::from($parametersArray, new BlueprintHelper());
     }
-    public function invalidParametersDataProvider(): array
+    public static function invalidParametersDataProvider(): array
     {
         return [
             [

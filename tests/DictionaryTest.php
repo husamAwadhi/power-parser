@@ -31,7 +31,7 @@ class DictionaryTest extends TestCase
             $actual,
         );
     }
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
             ['test.my.limits', null, 'valid.php', 'you %s'],
@@ -51,7 +51,7 @@ class DictionaryTest extends TestCase
             $actual,
         );
     }
-    public function formattedValuesDataProvider(): array
+    public static function formattedValuesDataProvider(): array
     {
         return [
             ['test.my.limits', null, 'valid.php', 'you fool', ['fool']],
