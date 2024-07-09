@@ -12,7 +12,7 @@ class ReadFilter implements IReadFilter
     ) {
     }
 
-    public function readCell($columnAddress, $row, $worksheetName = '')
+    public function readCell(string $columnAddress, int $row, string $worksheetName = ''): bool
     {
         //TODO: find a useful way of pre filtering unwanted rows.
         return true;
