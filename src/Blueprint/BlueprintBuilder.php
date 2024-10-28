@@ -3,6 +3,7 @@
 namespace HusamAwadhi\PowerParser\Blueprint;
 
 use HusamAwadhi\PowerParser\Exception\InvalidBlueprintException;
+use Symfony\Component\Yaml\Yaml;
 
 class BlueprintBuilder
 {
@@ -58,8 +59,8 @@ class BlueprintBuilder
         }
 
         $content = match ($isPath) {
-            true => \yaml_parse_file($input),
-            false => \yaml_parse($input),
+            true => Yaml::parseFile($input),
+            false => Yaml::parse($input),
         };
 
         if (!$content) {

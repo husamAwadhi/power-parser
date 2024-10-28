@@ -10,6 +10,7 @@ use HusamAwadhi\PowerParser\Blueprint\BlueprintInterface;
 use HusamAwadhi\PowerParser\Exception\InvalidBlueprintException;
 use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Yaml\Yaml;
 
 class BlueprintTest extends TestCase
 {
@@ -19,7 +20,7 @@ class BlueprintTest extends TestCase
     {
         $rawFile = (string) file_get_contents($this->blueprintsDirectory .  'valid.yaml');
         $blueprint = Blueprint::from(
-            \yaml_parse($rawFile),
+            Yaml::parse($rawFile),
             $this->blueprintsDirectory .  'valid.yaml',
             new BlueprintHelper()
         );
@@ -35,7 +36,7 @@ class BlueprintTest extends TestCase
     {
         $this->expectException($exception);
         $path = $this->blueprintsDirectory . $fileName . '.yaml';
-        Blueprint::from(\yaml_parse_file($path), 'some-path', new BlueprintHelper());
+        Blueprint::from(Yaml::parseFile($path), 'some-path', new BlueprintHelper());
     }
     public static function invalidFilesProvider(): array
     {

@@ -38,7 +38,7 @@ final class Dictionary
             : $default;
     }
 
-    public function getFormatted(string $key, mixed $default = null, array $values): mixed
+    public function getFormatted(string $key, mixed $default = null, array $values = []): mixed
     {
         return \sprintf(
             $this->get($key, $default),
