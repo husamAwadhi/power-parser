@@ -42,8 +42,8 @@ class FieldsTest extends TestCase
                     Field::from('field2', 3),
                     Field::from('field3', 25, FieldType::INT),
                     Field::from('field4', 4, FieldType::BOOL_STRICT),
-                    Field::from('field5', 4, null, FieldFormat::from(FieldFormatEnum::STRING, 5)),
-                    Field::from('field5', 4, FieldType::BOOL, FieldFormat::from(FieldFormatEnum::FLOAT, 2)),
+                    Field::from('field5', 4, null, FieldFormat::from(FieldFormatEnum::STRING, '5')),
+                    Field::from('field5', 4, FieldType::BOOL, FieldFormat::from(FieldFormatEnum::FLOAT, '2')),
                 ],
             ],
         ];
@@ -86,7 +86,7 @@ class FieldsTest extends TestCase
                 InvalidFieldException::class,
             ],
             [
-                [['name' => 'field1', 'position' => 2, 'format' => 's%x'],],
+                [['name' => 'field1', 'position' => 2, 'format' => 's%'],],
                 InvalidFieldException::class,
             ],
             [
