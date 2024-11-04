@@ -41,7 +41,7 @@ class Fields implements ComponentInterface, Iterator
                 (array_key_exists('format', $field)
                     ? FieldFormatObject::from(
                         FieldFormat::from(explode('%', $field['format'])[0]),
-                        (int) explode('%', $field['format'])[1]
+                        explode('%', $field['format'])[1]
                     )
                     : null),
             );
@@ -103,11 +103,11 @@ class Fields implements ComponentInterface, Iterator
                 if (
                     count($format) !== 2 ||
                     !FieldFormat::tryFrom($format[0]) ||
-                    !is_numeric($format[1])
+                    is_null($format[1])
                 ) {
                     throw new InvalidFieldException(
                         \sprintf(
-                            'Blueprint format field has invalid value (%s). Acceptable value(s) {%s}%%{digits}',
+                            'Blueprint format field has invalid value (%s). Acceptable value(s) {%s}%%{argument}',
                             $field['format'],
                             implode(',', array_column(FieldFormat::cases(), 'value'))
                         )

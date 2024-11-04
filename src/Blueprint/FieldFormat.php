@@ -6,4 +6,5 @@ enum FieldFormat: string
 {
     case STRING = 's';
     case FLOAT = 'f';
+    case DATE = 'd';
 }

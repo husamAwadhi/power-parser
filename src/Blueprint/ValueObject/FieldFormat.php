@@ -8,11 +8,11 @@ class FieldFormat
 {
     public function __construct(
         public readonly FieldFormatEnum $type,
-        public readonly int $argument,
+        public readonly string $argument,
     ) {
     }
 
-    public static function from(FieldFormatEnum $type, int $argument): self
+    public static function from(FieldFormatEnum $type, string $argument): self
     {
         return new self(
             type: $type,

@@ -12,6 +12,7 @@ use HusamAwadhi\PowerParser\Blueprint\ValueObject\Condition;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Field;
 use HusamAwadhi\PowerParser\Exception\InvalidArgumentException;
 use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 abstract class BlueprintInterpreter implements ParserPluginInterface
 {
@@ -150,11 +151,14 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
                 FieldType::BOOL_STRICT => $value == true,
                 FieldType::INT => (int) $value,
                 FieldType::FLOAT => (float) $value,
+                FieldType::DATE => Date::excelToDateTimeObject($value),
             };
-        } elseif (null !== $field->format) {
+        }
+        if (null !== $field->format) {
             $value = match ($field->format->type) {
                 FieldFormat::STRING => substr($value, 0, $field->format->argument),
                 FieldFormat::FLOAT => round((float) $value, $field->format->argument, PHP_ROUND_HALF_UP),
+                FieldFormat::DATE => $value->format($field->format->argument),
             };
         }
 
