@@ -103,7 +103,6 @@ class Fields implements ComponentInterface, Iterator
                 if (
                     count($format) !== 2 ||
                     !FieldFormat::tryFrom($format[0]) ||
-                    null === $format[1] ||
                     (is_string($format[1]) && strlen(trim($format[1])) == 0)
                 ) {
                     throw new InvalidFieldException(

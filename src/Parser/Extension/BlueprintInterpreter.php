@@ -156,8 +156,8 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
         }
         if (null !== $field->format) {
             $value = match ($field->format->type) {
-                FieldFormat::STRING => substr($value, 0, $field->format->argument),
-                FieldFormat::FLOAT => round((float) $value, $field->format->argument, PHP_ROUND_HALF_UP),
+                FieldFormat::STRING => substr($value, 0, (int) $field->format->argument),
+                FieldFormat::FLOAT => round((float) $value, (int) $field->format->argument, PHP_ROUND_HALF_UP),
                 FieldFormat::DATE => $value->format($field->format->argument),
             };
         }
