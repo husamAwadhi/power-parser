@@ -36,6 +36,7 @@ class FieldsTest extends TestCase
                     ['name' => 'field4', 'position' => 4, 'type' => 'bool-strict'],
                     ['name' => 'field5', 'position' => 4, 'format' => 's%5'],
                     ['name' => 'field5', 'position' => 4, 'type' => 'bool', 'format' => 'f%2'],
+                    ['name' => 'field7', 'position' => 4, 'type' => 'date', 'format' => 'd%Ymd'],
                 ],
                 [
                     Field::from('field1', 2),
@@ -44,6 +45,7 @@ class FieldsTest extends TestCase
                     Field::from('field4', 4, FieldType::BOOL_STRICT),
                     Field::from('field5', 4, null, FieldFormat::from(FieldFormatEnum::STRING, '5')),
                     Field::from('field5', 4, FieldType::BOOL, FieldFormat::from(FieldFormatEnum::FLOAT, '2')),
+                    Field::from('field7', 4, FieldType::DATE, FieldFormat::from(FieldFormatEnum::DATE, 'Ymd')),
                 ],
             ],
         ];
