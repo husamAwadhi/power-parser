@@ -8,4 +8,5 @@ enum FieldType: string
     case FLOAT = 'float';
     case BOOL = 'bool';
     case BOOL_STRICT = 'bool-strict';
+    case DATE = 'date';
 }

@@ -11,6 +11,3 @@ parameters:
         - message: '#Left side of && is always false.#'
           path: src/Blueprint/Components/Components.php
           count: 1
-        - message: '#Parameter $length of function file_get_contents expects int<0, max>|null, int|null given.#'
-          path: src/Parser/Utils/IOCapable.php
-          count: 4

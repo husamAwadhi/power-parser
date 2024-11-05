@@ -18,6 +18,7 @@ class ParserTest extends TestCase
 {
     protected string $blueprintsDirectory = STORAGE_DIRECTORY . '/blueprints/';
     protected string $excelFile = STORAGE_DIRECTORY . '/sample.xlsx';
+    protected string $multiSheetExcelFile = STORAGE_DIRECTORY . '/sample-multi-sheet.xlsx';
     protected string $csvFile = STORAGE_DIRECTORY . '/sample.csv';
     protected Blueprint $blueprint;
     protected mixed $dummyPlugin;
@@ -42,7 +43,7 @@ class ParserTest extends TestCase
     {
         $parser = new Parser(
             $this->blueprint,
-            (string) \file_get_contents($this->excelFile),
+            $this->excelFile,
             [Spreadsheet::class => new Spreadsheet()]
         );
 
@@ -54,7 +55,7 @@ class ParserTest extends TestCase
 
         $parser = new Parser(
             $this->blueprint,
-            (string) \file_get_contents($this->excelFile),
+            $this->excelFile,
             [
                 Spreadsheet::class => new Spreadsheet(),
                 $this->dummyPlugin::class => $this->dummyPlugin
@@ -78,7 +79,7 @@ class ParserTest extends TestCase
 
         $parser = new Parser(
             $blueprint,
-            (string) \file_get_contents($this->excelFile),
+            $this->excelFile,
             [
                 $this->dummyPlugin::class => $this->dummyPlugin,
                 $this->dummyPlugin2::class => $this->dummyPlugin2,
@@ -96,7 +97,7 @@ class ParserTest extends TestCase
 
         $parser = new Parser(
             $blueprint,
-            (string) \file_get_contents($this->excelFile),
+            $this->excelFile,
             [
                 $this->dummyPlugin::class => $this->dummyPlugin,
                 $this->dummyPlugin2::class => $this->dummyPlugin2,
@@ -118,7 +119,7 @@ class ParserTest extends TestCase
         ];
         $parser = new Parser(
             $this->blueprint,
-            (string) \file_get_contents($this->excelFile),
+            $this->excelFile,
             $plugins
         );
 
@@ -134,7 +135,7 @@ class ParserTest extends TestCase
 
         $parser = new Parser(
             $this->blueprint,
-            (string) \file_get_contents($this->excelFile),
+            $this->excelFile,
             [$this->dummyPlugin::class => $this->dummyPlugin]
         );
 
@@ -145,7 +146,7 @@ class ParserTest extends TestCase
     {
         $parser = new Parser(
             $this->blueprint,
-            (string) \file_get_contents($this->excelFile),
+            $this->excelFile,
             [Spreadsheet::class => new Spreadsheet()]
         );
 
@@ -160,7 +161,7 @@ class ParserTest extends TestCase
 
         $parser = new Parser(
             $this->blueprint,
-            (string) \file_get_contents($this->excelFile),
+            $this->excelFile,
             [Spreadsheet::class => new Spreadsheet()]
         );
 
@@ -178,7 +179,7 @@ class ParserTest extends TestCase
 
         $parser = new Parser(
             $blueprint,
-            (string) \file_get_contents($this->csvFile),
+            $this->csvFile,
             [Spreadsheet::class => new Spreadsheet()]
         );
 
@@ -303,7 +304,7 @@ class ParserTest extends TestCase
     {
         $parser = new Parser(
             $this->blueprint,
-            (string) \file_get_contents($this->excelFile),
+            $this->excelFile,
             [Spreadsheet::class => new Spreadsheet()]
         );
 
@@ -322,7 +323,22 @@ class ParserTest extends TestCase
     {
         $parser = new Parser(
             $this->blueprint,
-            (string) \file_get_contents($this->excelFile),
+            $this->excelFile,
+            [Spreadsheet::class => new Spreadsheet()]
+        );
+        $parser->parse();
+
+        $this->assertEquals($expectedArray, $parser->getAsArray());
+    }
+
+    /**
+     * @dataProvider parsedExcelContentDataProvider
+     */
+    public function testGettingParsedMultiSheetExcelContentAsArray(array $expectedArray): void
+    {
+        $parser = new Parser(
+            $this->blueprint,
+            $this->multiSheetExcelFile,
             [Spreadsheet::class => new Spreadsheet()]
         );
         $parser->parse();
@@ -337,7 +353,7 @@ class ParserTest extends TestCase
     {
         $parser = new Parser(
             $this->blueprint,
-            (string) \file_get_contents($this->excelFile),
+            $this->excelFile,
             [Spreadsheet::class => new Spreadsheet()]
         );
 
@@ -588,7 +604,7 @@ class ParserTest extends TestCase
 
         $parser = new Parser(
             $blueprint,
-            (string) \file_get_contents($this->csvFile),
+            $this->csvFile,
             [Spreadsheet::class => new Spreadsheet()]
         );
 
@@ -606,7 +622,7 @@ class ParserTest extends TestCase
 
         $parser = new Parser(
             $blueprint,
-            (string) \file_get_contents($this->excelFile),
+            $this->excelFile,
             [Spreadsheet::class => new Spreadsheet()]
         );
 

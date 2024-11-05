@@ -18,7 +18,7 @@ class Parser implements JsonSerializable, ParserInterface
 
     public function __construct(
         public readonly Blueprint $blueprint,
-        public readonly string $content,
+        public readonly string $path,
         /** @var ParserPluginInterface[] */
         protected array $plugins = []
     ) {
@@ -53,7 +53,7 @@ class Parser implements JsonSerializable, ParserInterface
     public function parse(string $recommendedExtension = ''): self
     {
         $this->parsedContentPlugin = $this->getParserExtension($recommendedExtension)
-            ->parse($this->content, $this->blueprint);
+            ->parse($this->path, $this->blueprint);
 
         return $this;
     }

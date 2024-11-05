@@ -8,7 +8,6 @@ use HusamAwadhi\PowerParser\Blueprint\Type;
 use HusamAwadhi\PowerParser\Blueprint\ValueObject\Component;
 use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 use Iterator;
-use ReturnTypeWillChange;
 
 class Components implements ComponentInterface, Iterator
 {
@@ -111,14 +110,12 @@ class Components implements ComponentInterface, Iterator
         $this->position = 0;
     }
 
-    #[ReturnTypeWillChange]
-    public function current()
+    public function current(): mixed
     {
         return $this->components[$this->position];
     }
 
-    #[ReturnTypeWillChange]
-    public function key()
+    public function key(): mixed
     {
         return $this->position;
     }

@@ -8,7 +8,6 @@ use HusamAwadhi\PowerParser\Blueprint\ValueObject\Condition;
 use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use Iterator;
-use ReturnTypeWillChange;
 
 class Conditions implements ComponentInterface, Iterator
 {
@@ -114,14 +113,12 @@ class Conditions implements ComponentInterface, Iterator
         $this->position = 0;
     }
 
-    #[ReturnTypeWillChange]
-    public function current()
+    public function current(): mixed
     {
         return $this->conditions[$this->position];
     }
 
-    #[ReturnTypeWillChange]
-    public function key()
+    public function key(): mixed
     {
         return $this->position;
     }

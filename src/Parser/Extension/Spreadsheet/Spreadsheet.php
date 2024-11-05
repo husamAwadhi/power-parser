@@ -4,7 +4,6 @@ namespace HusamAwadhi\PowerParser\Parser\Extension\Spreadsheet;
 
 use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Parser\Extension\BlueprintInterpreter;
-use HusamAwadhi\PowerParser\Parser\Utils\IOCapable;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet as PhpSpreadsheet;
 
@@ -14,8 +13,6 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet as PhpSpreadsheet;
  */
 class Spreadsheet extends BlueprintInterpreter
 {
-    use IOCapable;
-
     protected PhpSpreadsheet $spreadsheet;
 
     protected Blueprint $blueprint;
@@ -47,14 +44,14 @@ class Spreadsheet extends BlueprintInterpreter
     /**
      * @inheritDoc
      */
-    public function parse(string $fileContent, Blueprint $blueprint): self
+    public function parse(string $path, Blueprint $blueprint): self
     {
         $this->blueprint = $blueprint;
         $reader = IOFactory::createReader(ucfirst($blueprint->extension));
         $reader->setReadDataOnly(true);
         $reader->setReadFilter(new ReadFilter($blueprint));
 
-        $this->spreadsheet = $reader->load($this->writeTemporaryFile(content: $fileContent));
+        $this->spreadsheet = $reader->load($path);
 
         $sheets = $this->spreadsheet->getAllSheets();
         $this->data = [];
@@ -64,8 +61,6 @@ class Spreadsheet extends BlueprintInterpreter
                 'content' => $sheet->toArray(),
             ];
         }
-
-        $this->deleteTemporaryFile();
 
         return $this;
     }

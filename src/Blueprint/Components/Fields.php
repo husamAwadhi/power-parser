@@ -11,7 +11,6 @@ use HusamAwadhi\PowerParser\Blueprint\ValueObject\FieldFormat as FieldFormatObje
 use HusamAwadhi\PowerParser\Dictionary;
 use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use Iterator;
-use ReturnTypeWillChange;
 
 class Fields implements ComponentInterface, Iterator
 {
@@ -41,7 +40,7 @@ class Fields implements ComponentInterface, Iterator
                 (array_key_exists('format', $field)
                     ? FieldFormatObject::from(
                         FieldFormat::from(explode('%', $field['format'])[0]),
-                        (int) explode('%', $field['format'])[1]
+                        explode('%', $field['format'])[1]
                     )
                     : null),
             );
@@ -103,11 +102,11 @@ class Fields implements ComponentInterface, Iterator
                 if (
                     count($format) !== 2 ||
                     !FieldFormat::tryFrom($format[0]) ||
-                    !is_numeric($format[1])
+                    (is_string($format[1]) && strlen(trim($format[1])) == 0)
                 ) {
                     throw new InvalidFieldException(
                         \sprintf(
-                            'Blueprint format field has invalid value (%s). Acceptable value(s) {%s}%%{digits}',
+                            'Blueprint format field has invalid value (%s). Acceptable value(s) {%s}%%{argument}',
                             $field['format'],
                             implode(',', array_column(FieldFormat::cases(), 'value'))
                         )
@@ -133,14 +132,12 @@ class Fields implements ComponentInterface, Iterator
         $this->position = 0;
     }
 
-    #[ReturnTypeWillChange]
-    public function current()
+    public function current(): mixed
     {
         return $this->fields[$this->position];
     }
 
-    #[ReturnTypeWillChange]
-    public function key()
+    public function key(): mixed
     {
         return $this->position;
     }
