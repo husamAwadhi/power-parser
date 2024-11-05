@@ -11,7 +11,6 @@ use HusamAwadhi\PowerParser\Blueprint\ValueObject\FieldFormat as FieldFormatObje
 use HusamAwadhi\PowerParser\Dictionary;
 use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use Iterator;
-use ReturnTypeWillChange;
 
 class Fields implements ComponentInterface, Iterator
 {
@@ -133,14 +132,12 @@ class Fields implements ComponentInterface, Iterator
         $this->position = 0;
     }
 
-    #[ReturnTypeWillChange]
-    public function current()
+    public function current(): mixed
     {
         return $this->fields[$this->position];
     }
 
-    #[ReturnTypeWillChange]
-    public function key()
+    public function key(): mixed
     {
         return $this->position;
     }
