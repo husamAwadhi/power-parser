@@ -15,6 +15,7 @@ class Component
         public readonly bool $table,
         public readonly string $name,
         public readonly ?Conditions $conditions = null,
+        public readonly int $page = 1,
     ) {
     }
 
@@ -25,8 +26,9 @@ class Component
             fields: $component['fields'],
             mandatory: (bool) ($component['mandatory'] ?? false),
             table: (bool) ($component['table'] ?? false),
+            name: $component['name'],
             conditions: ($component['conditions'] ?? null),
-            name: $component['name']
+            page: $component['page'] ?? 1,
         );
     }
 }

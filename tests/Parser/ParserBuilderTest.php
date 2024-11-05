@@ -61,11 +61,15 @@ class ParserBuilderTest extends TestCase
 
     public function testExceptionWhenFileNotFound(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(MissingElementException::class);
 
         $builder = new ParserBuilder();
+        $blueprintBuilder = new BlueprintBuilder(new BlueprintHelper());
+        $blueprintBuilder->load($this->blueprintsDirectory . 'valid.yaml');
+        $blueprint = $blueprintBuilder->build();
 
-        $builder->addFile($this->excelFile . 'legit')
+        $builder->addBlueprint($blueprint)
+            ->addFile($this->excelFile . 'legit')
             ->registerExtension(new Spreadsheet())
             ->build();
     }

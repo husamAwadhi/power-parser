@@ -6,18 +6,15 @@ use HusamAwadhi\PowerParser\Blueprint\Blueprint;
 use HusamAwadhi\PowerParser\Exception\InvalidPLuginException;
 use HusamAwadhi\PowerParser\Exception\MissingElementException;
 use HusamAwadhi\PowerParser\Parser\Extension\ParserPluginInterface;
-use HusamAwadhi\PowerParser\Parser\Utils\IOCapable;
 
 class ParserBuilder
 {
-    use IOCapable;
-
     /** @var ParserPluginInterface[] list of accepted extensions */
     protected array $extensions = [];
 
     protected Blueprint $blueprint;
 
-    protected string $fileContent;
+    protected string $path;
 
     public function __construct(
         public readonly int $maxFileLength = 15000
@@ -43,7 +40,7 @@ class ParserBuilder
 
     public function addFile(string $path): self
     {
-        $this->fileContent = $this->load($path);
+        $this->path = $path;
 
         return $this;
     }
@@ -54,8 +51,12 @@ class ParserBuilder
             throw new MissingElementException('blueprint is not added.');
         }
 
-        if (!isset($this->fileContent)) {
-            throw new MissingElementException('file is not loaded.');
+        if (!isset($this->path)) {
+            throw new MissingElementException('file path is not provided.');
+        }
+
+        if (!file_exists($this->path) || !is_readable($this->path)) {
+            throw new MissingElementException("file: {$this->path} does not exist or unreadable.");
         }
     }
 
@@ -65,7 +66,7 @@ class ParserBuilder
 
         $parser = new Parser(
             $this->blueprint,
-            $this->fileContent,
+            $this->path,
             $this->extensions,
         );
 

@@ -33,11 +33,14 @@ abstract class BlueprintInterpreter implements ParserPluginInterface
         }
 
         $this->filtered = [];
-        foreach ($this->data as $page) {
+        foreach ($this->data as $pageNumber => $page) {
             $content = $page['content'];
 
             /** @var Component */
             foreach ($this->blueprint->components as $component) {
+                if ($component->page !== ($pageNumber + 1)) {
+                    continue;
+                }
                 $found = false;
                 $index = $this->lastHitIndex + 1;
                 for ($index; $index < count($content); ++$index) {
