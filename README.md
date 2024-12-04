@@ -138,4 +138,4 @@ blueprint:
 
 ## License
 
-PowerParser is an open-sourced software licensed under the [MIT license](LICENSE.md).
+PowerParser is an open-sourced software licensed under the [MIT license](LICENSE).
