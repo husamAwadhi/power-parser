@@ -1,10 +1,10 @@
 # ![PowerParser](/storage/img/logo_size_invert.jpg)
 
-[![Actions](https://img.shields.io/github/actions/workflow/status/husamAwadhi/power-parser/main.yaml?branch=main&label=Tests&style=round-square)](https://github.com/husamAwadhi/power-parser/actions)
-[![Latest Stable Version](http://poser.pugx.org/husam-awadhi/power-parser/v)](https://packagist.org/packages/husam-awadhi/power-parser) 
-[![PHP Version Require](http://poser.pugx.org/husam-awadhi/power-parser/require/php)](https://packagist.org/packages/husam-awadhi/power-parser)
-[![License](http://poser.pugx.org/husam-awadhi/power-parser/license)](https://packagist.org/packages/husam-awadhi/power-parser) 
-[![Total Downloads](http://poser.pugx.org/husam-awadhi/power-parser/downloads)](https://packagist.org/packages/husam-awadhi/power-parser) 
+[![Actions](https://img.shields.io/github/actions/workflow/status/husamAwadhi/power-parser/main.yaml?branch=master&label=Tests&style=round-square)](https://github.com/husamAwadhi/power-parser/actions)
+[![Latest Stable Version](https://poser.pugx.org/husam-awadhi/power-parser/v)](https://packagist.org/packages/husam-awadhi/power-parser) 
+[![PHP Version Require](https://poser.pugx.org/husam-awadhi/power-parser/require/php)](https://packagist.org/packages/husam-awadhi/power-parser)
+[![License](https://poser.pugx.org/husam-awadhi/power-parser/license)](https://packagist.org/packages/husam-awadhi/power-parser) 
+[![Total Downloads](https://poser.pugx.org/husam-awadhi/power-parser/downloads)](https://packagist.org/packages/husam-awadhi/power-parser) 
 
 File parsing tool with a configured blueprint design with support for `ods`, `xlsx`, `xls`, `xml`, `html`, `sylk`, `csv` file types out-of-the-box.
 
