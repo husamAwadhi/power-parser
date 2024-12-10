@@ -9,6 +9,9 @@ use HusamAwadhi\PowerParser\Blueprint\ValueObject\Component;
 use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 use Iterator;
 
+/**
+ * @implements Iterator<Component>
+ */
 class Components implements ComponentInterface, Iterator
 {
     private const INVALID_TYPE = 'Element %s must be an array, given %s';
