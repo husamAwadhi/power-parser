@@ -12,6 +12,9 @@ use HusamAwadhi\PowerParser\Dictionary;
 use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use Iterator;
 
+/**
+ * @implements Iterator<Field>
+ */
 class Fields implements ComponentInterface, Iterator
 {
     protected Dictionary $dict;

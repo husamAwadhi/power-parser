@@ -9,6 +9,9 @@ use HusamAwadhi\PowerParser\Exception\InvalidComponentException;
 use HusamAwadhi\PowerParser\Exception\InvalidFieldException;
 use Iterator;
 
+/**
+ * @implements Iterator<Condition>
+ */
 class Conditions implements ComponentInterface, Iterator
 {
     private int $position = 0;
